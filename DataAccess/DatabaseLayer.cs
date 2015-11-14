@@ -13,13 +13,26 @@ namespace DataAccess
     public class DatabaseLayer
     {
         private string conn = ConfigurationManager.ConnectionStrings["scheduler_database"].ToString();
+        private SqlConnection objsqlconn;
+        public DatabaseLayer()
+        {
+            objsqlconn = new SqlConnection(conn);
+            objsqlconn.Open();
+        }
 
         public void InsertUpdateDeleteSQLString(string sqlstring)
         {
-            SqlConnection objsqlconn = new SqlConnection(conn);
-            objsqlconn.Open();
+            
             SqlCommand objcmd = new SqlCommand(sqlstring, objsqlconn);
             objcmd.ExecuteNonQuery();
+        }
+
+        public DataTable ToDataTable(string sqlcommand)
+        {
+            SqlDataAdapter da = new SqlDataAdapter(sqlcommand, objsqlconn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            return dt;
         }
     }
 }
