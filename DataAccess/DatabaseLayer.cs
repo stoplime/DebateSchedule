@@ -8,31 +8,58 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
+using BussinessObject;
+
 namespace DataAccess
 {
     public class DatabaseLayer
     {
-        private string conn = ConfigurationManager.ConnectionStrings["scheduler_database"].ToString();
-        private SqlConnection objsqlconn;
+        private SqlConnection sqlConnection;
+
         public DatabaseLayer()
         {
-            objsqlconn = new SqlConnection(conn);
-            objsqlconn.Open();
+            string conn = ConfigurationManager.ConnectionStrings["scheduler_database"].ToString();
+            sqlConnection = new SqlConnection(conn);
         }
 
-        public void InsertUpdateDeleteSQLString(string sqlstring)
+        //add user from sql execute command
+        public string newUser(CreateAccount new_user)
         {
-            
-            SqlCommand objcmd = new SqlCommand(sqlstring, objsqlconn);
-            objcmd.ExecuteNonQuery();
+            int insertid = 0;
+
+            try
+            {
+                sqlConnection.Open();
+                string newUser_sql_string = "INSERT INTO Users(user_logon, user_password, user_email) " + "VALUES(@user_logon, @user_password, @user_email)";
+                SqlCommand command = new SqlCommand(newUser_sql_string, sqlConnection);
+                command.Parameters.AddWithValue("user_logon", new_user.UserName);
+                command.Parameters.AddWithValue("user_password", new_user.EncriptPass);
+                command.Parameters.AddWithValue("user_email", new_user.Email);
+
+                insertid = command.ExecuteNonQuery();
+
+                if (insertid > 0)
+                {
+                    return "success";
+                }
+                else
+                {
+                    return "Error in trying to add new user: " + command.ToString();
+                }
+            }
+            catch (SqlException sqle)
+            {
+                throw sqle;
+            }
+            finally
+            {
+                if (sqlConnection.State != ConnectionState.Closed)
+                {
+                    sqlConnection.Close();
+                }
+            }
         }
 
-        public DataTable ToDataTable(string sqlcommand)
-        {
-            SqlDataAdapter da = new SqlDataAdapter(sqlcommand, objsqlconn);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            return dt;
-        }
-    }
+
+    } 
 }

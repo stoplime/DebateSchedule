@@ -44,6 +44,12 @@
     <Compile Include="DatabaseLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BussinessObject\BussinessObject.csproj">
+      <Project>{06dd53c6-ff30-45f2-89d7-0692d8433bde}</Project>
+      <Name>BussinessObject</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

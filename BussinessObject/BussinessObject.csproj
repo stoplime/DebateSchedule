@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateAccount.cs" />
+    <Compile Include="ForgotPass.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="UserEnum.cs" />
     <Compile Include="_PassEncription.cs" />

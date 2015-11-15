@@ -104,6 +104,7 @@
     <Content Include="raking.cshtml" />
     <Content Include="schedule.cshtml" />
     <Content Include="scores.cshtml" />
+    <Content Include="forgotPass.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

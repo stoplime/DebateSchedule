@@ -1,0 +1,70 @@
+﻿@using BussinessObject;
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Load Base -->
+    @RenderPage("_Base.cshtml")
+</head>
+<body>
+    <!-- Content -->
+    <div class="container">
+        @{
+            Validation.RequireField("user_name", "Please enter an Email");
+
+            if (IsPost)
+            {
+                string inputUsername = Request.Form["user_name"];
+                if (Validation.IsValid())
+                {
+                    //instanciate a new forgot pass object
+
+                    //Validate username or email
+                    /*
+                    if (forgot_pass.Validate())
+                    {
+                        //Successful validation code here (AKA send Reset code here)
+                    }
+                    else
+                    {
+                        <p class="red lighten-2">
+                            *Error: Username or Email does not match with the system <br />
+                        </p>
+                    }
+                    */
+                }
+            }
+        }
+        <!-- Forgot pass form -->
+        <form class="col s12" method="post">
+
+            <div class="row">
+                <h2>Reset Password</h2>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input name="user_name" type="text" class="validate" value="@Request.Form["user_name"]">
+                    <label for="user_name">Username or Email</label>
+                    @Html.ValidationMessage("user_name")
+                </div>
+            </div>
+            
+            <div class="row ">
+                <div class="col s12">
+                    <button class="btn-large waves-effect waves-light" type="submit" name="action">Send Reset</button>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col s12">
+                    <a href="~/login.cshtml" class="btn waves-effect waves-light">Cancel</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+
+</html>

@@ -21,6 +21,8 @@
             Validation.RequireField("email", "Please enter an Email");
             Validation.RequireField("user_type", "Please select a Position");
 
+            string userType;
+
             if (IsPost)
             {
                 string inputFirstName = Request.Form["first_name"];
@@ -38,24 +40,14 @@
 
                 if (Validation.IsValid())
                 {
-                    CreateAccount account = new CreateAccount(inputFirstName, inputLastName, inputUsername, inputPassword, inputEmail, inputUserType);
+                    CreateAccount account = new CreateAccount(inputFirstName, inputLastName, inputUsername, inputPassword, inputEmail);
 
+                    string error;
 
-
-                    /*if (login.Validate())
+                    if (account.Valitate(out error))
                     {
-                    //Successful login code here
-                    <p class="red lighten-2">
-                    username: @inputUsername <br />
-                    encriptPass: @login.EncriptPass <br />
-                    </p>
+                        <p class="flow-text red lighten-2">@error</p>
                     }
-                    else
-                    {
-                    <p class="red lighten-2">
-                    *Error: Username and/or Password does not match with the system <br />
-                    </p>
-                    }*/
                 }
             }
         }
@@ -107,7 +99,9 @@
                     <p class="red-text lighten-2">@Html.ValidationMessage("user_type")</p>
                 </div>
             </div>
-
+            @{
+                //Html.DropDownList("user_type", null, new { @onchage = "userType = this.value" })
+            }
             <!-- Only for Team Members -->
 
 
@@ -196,7 +190,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('select').material_select();
-        });
+                });
     </script>
 
 </body>

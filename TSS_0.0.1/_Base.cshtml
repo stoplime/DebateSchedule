@@ -24,26 +24,29 @@
 </head>
 
 <body>
-    
-    <nav>
-        <!-- Header -->
-        <div class="nav-wrapper">
-            <a href="~/index.cshtml" class="brand-logo center">Team Scheduling System</a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="~/login.cshtml">Login</a></li>
-            </ul>
+    <div class="navbar-fixed">
+        <nav>
+            <!-- Header -->
+            <div class="nav-wrapper">
+                <a href="~/index.cshtml" class="brand-logo center hide-on-small-only">Team Scheduling System</a>
+                <a href="~/index.cshtml" class="brand-logo center hide-on-med-and-up">T.S.S</a>
+                <ul id="nav-mobile" class="right">
+                    <li><a href="~/login.cshtml">Login</a></li>
+                </ul>
 
-            <!-- Side nav -->
+                <!-- Side nav -->
 
 
-            <ul id="slide-out" class="side-nav">
-                <li><a href="~/schedule.cshtml">Schedule</a></li>
-                <li><a href="~/scores.cshtml">Score</a></li>
-                <li><a href="~/raking.cshtml">Ranking</a></li>
-            </ul>
-            <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
-        </div>
-    </nav>
+                <ul id="slide-out" class="side-nav">
+                    <li><a href="~/schedule.cshtml">Schedule</a></li>
+                    <li><a href="~/scores.cshtml">Score</a></li>
+                    <li><a href="~/raking.cshtml">Ranking</a></li>
+                </ul>
+                <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
+            </div>
+        </nav>
+    </div>
+
     <script>
         $('.button-collapse').sideNav({
             menuWidth: 300, // Default is 240
@@ -51,7 +54,7 @@
             closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
         });
     </script>
-    
+
 </body>
 
 </html>

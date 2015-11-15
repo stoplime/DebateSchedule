@@ -6,34 +6,25 @@ using System.Threading.Tasks;
 
 namespace BussinessObject
 {
-    public class Login
+    class ForgotPass
     {
-        // properties
         private string username;
         public string Username
         {
             get { return username; }
-        }
-        
-        private string encriptPass;
-        public string EncriptPass
-        {
-            get { return encriptPass; }
+            set { username = value; }
         }
 
-        //Constructor
-        public Login(string username, string password)
+        public ForgotPass(string username)
         {
             this.username = username;
-            this.encriptPass = _PassEncription.Encript(password);
         }
 
-        //Methods
         public bool Validate(out string errorMsgs)
         {
-            //stoplime's validation code
-            // Assuming dataLogin object
             errorMsgs = "";
+
+            //validate the username
             bool enteredUsername = false;
             bool enteredEmail = false;
 
@@ -56,19 +47,11 @@ namespace BussinessObject
                 return false;
             }
 
-            //***Check if password is correct***
-            if (dataLogin.validPass(username, encriptPass, enteredEmail))// accepts three input(string username, string pass, bool isEmail) returns true if correct
-            {
-                // user enterd a correct username and pass
-                return true;
-            }
-            else
-            {
-                // user entered an incorrect username and pass
-                errorMsgs = "Invalid Password";
-                return false;
-            }
-            
+            //finish Validation
+            //*********** Send Email to user ************
+
+
+            return true;
         }
 
     }
