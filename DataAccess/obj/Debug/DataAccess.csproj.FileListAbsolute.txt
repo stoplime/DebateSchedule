@@ -8,5 +8,3 @@ C:\Users\workstation\Documents\My Web Sites\Github\DataAccess\bin\Debug\DataAcce
 C:\Users\workstation\Documents\My Web Sites\Github\DataAccess\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
 C:\Users\workstation\Documents\My Web Sites\Github\DataAccess\obj\Debug\DataAccess.dll
 C:\Users\workstation\Documents\My Web Sites\Github\DataAccess\obj\Debug\DataAccess.pdb
-C:\Users\workstation\Documents\My Web Sites\Github\DataAccess\bin\Debug\BussinessObject.dll
-C:\Users\workstation\Documents\My Web Sites\Github\DataAccess\bin\Debug\BussinessObject.pdb

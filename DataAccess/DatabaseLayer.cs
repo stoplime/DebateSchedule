@@ -8,13 +8,17 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
-using BussinessObject;
-
 namespace DataAccess
 {
     public class DatabaseLayer
     {
         private SqlConnection sqlConnection;
+        public SqlConnection SqlConnection
+        {
+            get { return sqlConnection; }
+            set { sqlConnection = value; }
+        }
+        
 
         public DatabaseLayer()
         {
@@ -23,6 +27,7 @@ namespace DataAccess
         }
 
         //add user from sql execute command
+        /*
         public string newUser(CreateAccount new_user)
         {
             int insertid = 0;
@@ -59,7 +64,7 @@ namespace DataAccess
                 }
             }
         }
-
+        */
 
     } 
 }

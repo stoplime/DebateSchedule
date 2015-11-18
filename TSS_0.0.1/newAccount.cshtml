@@ -22,6 +22,7 @@
             Validation.RequireField("user_type", "Please select a Position");
 
             string userType;
+            CreateAccount account;
 
             if (IsPost)
             {
@@ -40,7 +41,7 @@
 
                 if (Validation.IsValid())
                 {
-                    CreateAccount account = new CreateAccount(inputFirstName, inputLastName, inputUsername, inputPassword, inputEmail);
+                    account = new CreateAccount(inputFirstName, inputLastName, inputUsername, inputPassword, inputEmail);
 
                     string error;
 
@@ -99,8 +100,14 @@
                     <p class="red-text lighten-2">@Html.ValidationMessage("user_type")</p>
                 </div>
             </div>
+            
             @{
-                //Html.DropDownList("user_type", null, new { @onchage = "userType = this.value" })
+                /*
+                <asp:DropDownList id="ddlUserType" onchange="@{
+
+                }"></asp:DropDownList>
+                */
+//Html.DropDownList("user_type", null, new { @onchage = "userType = this.value" })
             }
             <!-- Only for Team Members -->
 
@@ -190,7 +197,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('select').material_select();
-                });
+        });
     </script>
 
 </body>

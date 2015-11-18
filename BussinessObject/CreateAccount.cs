@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess;
 
 namespace BussinessObject
 {
@@ -50,6 +51,20 @@ namespace BussinessObject
             set { userType = value; }
         }
 
+        private string schoolSelect;
+        public string SchoolSelect
+        {
+            get { return schoolSelect; }
+            set { schoolSelect = value; }
+        }
+
+        private string teamSelect;
+        public string TeamSelect
+        {
+            get { return teamSelect; }
+            set { teamSelect = value; }
+        }
+
         private string schoolInput;
         public string SchoolInput
         {
@@ -64,6 +79,8 @@ namespace BussinessObject
             set { refCode = value; }
         }
 
+        private CreateAccData dataCreateAcc;
+
         public CreateAccount(string firstName, string lastName, string userName, string password, string email)
         {
             this.firstName = firstName;
@@ -73,6 +90,7 @@ namespace BussinessObject
             this.email = email;
 
             //insert code to make new account here
+            dataCreateAcc = new CreateAccData();
         }
 
         public string[] GetSchool()
@@ -85,7 +103,7 @@ namespace BussinessObject
         public string[] GetTeams(string selectedSchool)
         {
             //***Get teams from selected school***
-            return dataCreateAcc.GetTeam(selectedSchool);// Accepts a string of the school name selected, returns a string array of the names of teams available
+            return dataCreateAcc.GetTeams(selectedSchool);// Accepts a string of the school name selected, returns a string array of the names of teams available
         }
 
         public bool Valitate(out string errorMsgs)
@@ -148,7 +166,7 @@ namespace BussinessObject
             //Add to database
             try
             {
-                dataCreateAcc.AddUser(this);
+                errorMsgs += dataCreateAcc.AddUser(firstName,lastName,userName,encriptPass,email,(int)userType,schoolSelect,teamSelect,schoolInput);
             }catch(Exception e)
             {
                 errorMsgs += e + " \n";

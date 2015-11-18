@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess;
 
 namespace BussinessObject
 {
@@ -22,6 +23,8 @@ namespace BussinessObject
 
         public bool Validate(out string errorMsgs)
         {
+            LoginData dataLogin = new LoginData();
+
             errorMsgs = "";
 
             //validate the username

@@ -10,19 +10,21 @@
     <!-- Content -->
     <div class="container">
         @{
-            Validation.RequireField("user_name", "Please enter a Username");
-            Validation.RequireField("password", "Please enter a Password");
+                        Validation.RequireField("user_name", "Please enter a Username");
+                        Validation.RequireField("password", "Please enter a Password");
 
-            if (IsPost)
-            {
-                string inputUsername = Request.Form["user_name"];
-                string inputPassword = Request.Form["password"];
-                if (Validation.IsValid())
-                {
-                    Login login = new Login(inputUsername, inputPassword);
+                        if (IsPost)
+                        {
+                            string inputUsername = Request.Form["user_name"];
+                            string inputPassword = Request.Form["password"];
+                            if (Validation.IsValid())
+                            {
+                                Login login = new Login(inputUsername, inputPassword);
 
-                    if (login.Validate())
-                    {
+                                string error;
+
+                                if (login.Validate(out error))
+                                {
                         //Successful login code here
                         <p class="red lighten-2">
                             username: @inputUsername <br />
@@ -33,6 +35,7 @@
                     {
                         <p class="red lighten-2">
                             *Error: Username and/or Password does not match with the system <br />
+                            @error
                         </p>
                     }
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess;
 
 namespace BussinessObject
 {
@@ -31,6 +32,8 @@ namespace BussinessObject
         //Methods
         public bool Validate(out string errorMsgs)
         {
+            LoginData dataLogin = new LoginData();
+
             //stoplime's validation code
             // Assuming dataLogin object
             errorMsgs = "";
