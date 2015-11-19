@@ -93,14 +93,14 @@ namespace BussinessObject
             dataCreateAcc = new CreateAccData();
         }
 
-        public string[] GetSchool()
+        public List<string> GetSchool()
         {
             //***Get Schools***
             return dataCreateAcc.GetSchools();// returns all school names in the form of a string array
             
         }
 
-        public string[] GetTeams(string selectedSchool)
+        public List<string> GetTeams(string selectedSchool)
         {
             //***Get teams from selected school***
             return dataCreateAcc.GetTeams(selectedSchool);// Accepts a string of the school name selected, returns a string array of the names of teams available

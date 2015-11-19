@@ -21,24 +21,25 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>01</td>
-                    <td>01/01/0001 00:00am</td>
-                    <td>Pi</td>
-                    <td>Tau</td>
-                </tr>
-                <tr>
-                    <td>02</td>
-                    <td>01/01/0001 01:00am</td>
-                    <td>Einstien</td>
-                    <td>Newton</td>
-                </tr>
-                <tr>
-                    <td>03</td>
-                    <td>01/01/0001 02:00am</td>
-                    <td>Godzilla</td>
-                    <td>Chuck Norris</td>
-                </tr>
+                @{
+                    Scheduler scheduler = new Scheduler();
+                    int count = 0;
+                    for (int i = 0; i < scheduler.RoundTest.Count; i++)
+                    {
+                        for (int j = 0; j < scheduler.RoundTest[i].Matches.Count; j++)
+                        {
+                            count++;
+                            int roundNum = i + 1;
+                            <tr>
+                                <td>@count</td>
+                                <td>round @roundNum</td>
+                                <td>@scheduler.RoundTest[i].Matches[j].Team1.Name</td>
+                                <td>@scheduler.RoundTest[i].Matches[j].Team2.Name</td>
+                            </tr>
+                        }
+                    }
+                }
+                
             </tbody>
         </table>
     </div>
