@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace DataAccess
 {
@@ -16,7 +17,6 @@ namespace DataAccess
         public LoginData()
         {
             dl = new DatabaseLayer();
-
         }
 
         public bool validUsername(string userName)
@@ -51,43 +51,33 @@ namespace DataAccess
             return false;
         }
 
-        public bool validPass(string username, int pass, bool isEmail)
+        public bool validPass(string username, string pass, bool isEmail, out int userID)
         {
             //returns true if login sequence is correct
             dl.SqlConnection.Open();
+            string getPass = "SELECT users_id FROM Users WHERE ";
             if (isEmail)
             {
-                //check the pass from username as email
-                string getPassFromEmail = "SELECT users_password FROM Users WHERE users_email='" + username + "'";
-                SqlCommand sqlc = new SqlCommand(getPassFromEmail, dl.SqlConnection);
-                int emails = sqlc.ExecuteNonQuery();
-                if (emails > 0)
-                {
-                    dl.SqlConnection.Close();
-                    if (true)
-                    {
-
-                    }
-                    
-                }
-
-                dl.SqlConnection.Close();
-                return false;
+                getPass += "users_email";
             }
             else
             {
-                //check the pass from username as username
-                string getPassFromName = "SELECT users_password FROM Users WHERE users_login='" + username + "'";
-                SqlCommand sqlc = new SqlCommand(getPassFromName, dl.SqlConnection);
-                int names = sqlc.ExecuteNonQuery();
-                if (names > 0)
-                {
-                    dl.SqlConnection.Close();
-                    return true;
-                }
-                dl.SqlConnection.Close();
-                return false;
+                getPass += "users_login";
             }
+
+            getPass += "='" + username + "' AND users_password='" + pass + "'";
+
+            SqlCommand sqlc = new SqlCommand(getPass, dl.SqlConnection);
+            SqlDataReader reader = sqlc.ExecuteReader();
+            if (reader.HasRows)
+            {
+                userID = reader.GetInt32(0);
+                dl.SqlConnection.Close();
+                return true;
+            }
+            userID = -1;
+            dl.SqlConnection.Close();
+            return false;
         }
 
     }

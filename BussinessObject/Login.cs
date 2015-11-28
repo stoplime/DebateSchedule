@@ -15,13 +15,10 @@ namespace BussinessObject
     {
         // properties
         private string username;
-        public string Username
-        {
-            get { return username; }
-        }
 
-        private int encriptPass;
-        public int EncriptPass
+        private string encriptPass;
+        //for debug purposes only
+        public string EncriptPass
         {
             get { return encriptPass; }
         }
@@ -30,7 +27,8 @@ namespace BussinessObject
         public Login(string username, string password)
         {
             this.username = username;
-            this.encriptPass = _PassEncription.Encript(password);
+            //this.encriptPass = _PassEncription.Encript(password);
+            this.encriptPass = password;
         }
 
         //Methods
@@ -39,7 +37,7 @@ namespace BussinessObject
 
         }*/
 
-        public bool Validate(out string errorMsgs)
+        public bool Validate(out string errorMsgs, out int userID)
         {
             LoginData dataLogin = new LoginData();
 
@@ -65,14 +63,14 @@ namespace BussinessObject
             {
                 //ERROR: user entered an invalid Username or Email
                 errorMsgs = "Invalid Username or Email";
+                userID = -1;
                 return false;
             }
 
             //***Check if password is correct***
-            if (dataLogin.validPass(username, encriptPass, enteredEmail))// accepts three input(string username, string pass, bool isEmail) returns true if correct
+            if (dataLogin.validPass(username, encriptPass, enteredEmail, out userID))// accepts three input(string username, string pass, bool isEmail) returns true if correct
             {
                 // user enterd a correct username and pass
-                
                 return true;
             }
             else

@@ -1,4 +1,5 @@
 @using BussinessObject;
+@using System.Diagnostics;
 <html>
 
 <head>
@@ -10,6 +11,7 @@
     <!-- Content -->
     <div class="container">
         @{
+            Login login;
             Validation.RequireField("user_name", "Please enter a Username");
             Validation.RequireField("password", "Please enter a Password");
 
@@ -19,25 +21,26 @@
                 string inputPassword = Request.Form["password"];
                 if (Validation.IsValid())
                 {
-                    Login login = new Login(inputUsername, inputPassword);
+                    login = new Login(inputUsername, inputPassword);
 
                     string error;
+                    int userID;
 
-                    if (/*login.Validate(out error)*/true)
+                    if (login.Validate(out error, out userID))
                     {
                         //Successful login code here
                         //Request.Cookies["UserID"].Value = login.GetUserID(); // sets up that you have loged in using cookies I think
                         //Response.Redirect("~/index.cshtml");
                         //displays login information
-                        <p class="red lighten-2">
-                            username: @inputUsername <br />
-                            encriptPass: @login.EncriptPass <br />
-                        </p>
+
+                        Debug.WriteLine("userID: " + userID);
+                        Debug.WriteLine("username: " + inputUsername);
+                        Debug.WriteLine("encriptPass: " + login.EncriptPass);
                     }
                     else
                     {
                         <p class="red lighten-2">
-                            *Error: Username and/or Password does not match with the system <br />
+                            Error: Username and/or Password does not match with the system <br />
                             @error
                         </p>
                     }
