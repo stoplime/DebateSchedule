@@ -21,16 +21,16 @@ namespace BussinessObject
             }
         }
 
-        public static string Encript(string pass)
+        public static int Encript(string pass)
         {
             char[] input = pass.ToCharArray();
-            string output = "";
+            int output = 0;
             rand = new Random(seed);
             foreach (char letter in input)
             {
                 int num = Convert.ToInt32(letter);
                 num *= rand.Next(0,rand.Next());
-                output += (char)num;
+                output += num;
             }
             return output;
         }

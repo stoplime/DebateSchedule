@@ -1,4 +1,6 @@
 @using BussinessObject;
+@using DataAccess;
+
 <html>
 
 <head>
@@ -10,6 +12,21 @@
     <!-- Content -->
     <div class="container">
         <h4>Match Schedule</h4>
+        @{
+            bool edit = false;
+            Scheduler scheduler = new Scheduler();
+            /*string userID = Request.QueryString["user_id"];
+
+            if (userID != "")
+            {
+                scheduler.setUserID(userID);
+            }
+            */
+            //if (scheduler.isUserSuper())
+            //{
+                <button class="btn waves-effect waves-light" type="submit" onclick="@{edit=true;}">Edit<i class="material-icons prefix">mode_edit</i></button>@edit
+            //}
+        }
         <table id="schedule" class="bordered">
             <thead>
                 <tr>
@@ -22,7 +39,6 @@
 
             <tbody>
                 @{
-                    Scheduler scheduler = new Scheduler();
                     int count = 0;
                     for (int i = 0; i < scheduler.RoundTest.Count; i++)
                     {

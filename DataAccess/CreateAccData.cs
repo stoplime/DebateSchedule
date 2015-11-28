@@ -104,6 +104,7 @@ namespace DataAccess
             string getUsername = "SELECT * FROM Users WHERE users_login='" + userName + "'";
             SqlCommand sqlc = new SqlCommand(getUsername, dl.SqlConnection);
             int names = sqlc.ExecuteNonQuery();
+            
             if (names > 0)
             {
                 dl.SqlConnection.Close();
@@ -148,12 +149,10 @@ namespace DataAccess
         {
             //returns true if referee code is valid
             
-            
-
             return true;
         }
 
-        public string AddUser(string firstName, string lastName, string userName, string encriptPass, string email, int userType, string schoolSelect, string teamSelect, string schoolInput)
+        public string AddUser(string firstName, string lastName, string userName, int encriptPass, string email, int userType, string schoolSelect, string teamSelect, string schoolInput)
         {
             string errorMsgs = "";
             //creates an entry for new user into the database
@@ -167,7 +166,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue("users_password", encriptPass);
                 command.Parameters.AddWithValue("users_email", email);
                 command.Parameters.AddWithValue("users_createddate", DateTime.Now);
-
+                command.ExecuteNonQuery();
                 string personTable;
                 string schoolTable;
 

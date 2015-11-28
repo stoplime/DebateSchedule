@@ -30,8 +30,8 @@ namespace BussinessObject
             set { userName = value; }
         }
 
-        private string encriptPass;
-        public string EncriptPass
+        private int encriptPass;
+        public int EncriptPass
         {
             get { return encriptPass; }
             set { encriptPass = value; }

@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,10 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountReferee.cs" />
     <Compile Include="CreateAccount.cs" />
     <Compile Include="ForgotPass.cs" />
     <Compile Include="Login.cs" />
-    <Compile Include="Matchs.cs" />
+    <Compile Include="Match.cs" />
     <Compile Include="Round.cs" />
     <Compile Include="Scheduler.cs" />
     <Compile Include="Team.cs" />

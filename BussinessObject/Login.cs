@@ -19,9 +19,9 @@ namespace BussinessObject
         {
             get { return username; }
         }
-        
-        private string encriptPass;
-        public string EncriptPass
+
+        private int encriptPass;
+        public int EncriptPass
         {
             get { return encriptPass; }
         }
@@ -34,6 +34,11 @@ namespace BussinessObject
         }
 
         //Methods
+        /*public string GetUserID()
+        {
+
+        }*/
+
         public bool Validate(out string errorMsgs)
         {
             LoginData dataLogin = new LoginData();

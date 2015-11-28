@@ -12,8 +12,12 @@ namespace BussinessObject
     {
         public List<Round> RoundTest;
 
+        private ScheduleData accessToData;
+
         public Scheduler()
         {
+            accessToData = new ScheduleData();
+
             List<Team> test = new List<Team>();
             
             for (int i = 1; i <= 10; i++)
@@ -24,7 +28,19 @@ namespace BussinessObject
             RoundTest = ReSchedule(test);
         }
 
+        public void setUserID(string userID)
+        {
+            accessToData.UserID = userID;
+        }
 
+        public bool isUserSuper()
+        {
+            if (accessToData.UserType == "SuperReferee")
+            {
+                return true;
+            }
+            return false;
+        }
 
         public static List<Round> ReSchedule(List<Team> listTeam)
         {

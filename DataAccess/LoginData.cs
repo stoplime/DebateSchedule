@@ -51,7 +51,7 @@ namespace DataAccess
             return false;
         }
 
-        public bool validPass(string username, string pass, bool isEmail)
+        public bool validPass(string username, int pass, bool isEmail)
         {
             //returns true if login sequence is correct
             dl.SqlConnection.Open();
@@ -64,8 +64,13 @@ namespace DataAccess
                 if (emails > 0)
                 {
                     dl.SqlConnection.Close();
-                    return true;
+                    if (true)
+                    {
+
+                    }
+                    
                 }
+
                 dl.SqlConnection.Close();
                 return false;
             }

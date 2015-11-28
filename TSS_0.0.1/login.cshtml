@@ -10,22 +10,25 @@
     <!-- Content -->
     <div class="container">
         @{
-                        Validation.RequireField("user_name", "Please enter a Username");
-                        Validation.RequireField("password", "Please enter a Password");
+            Validation.RequireField("user_name", "Please enter a Username");
+            Validation.RequireField("password", "Please enter a Password");
 
-                        if (IsPost)
-                        {
-                            string inputUsername = Request.Form["user_name"];
-                            string inputPassword = Request.Form["password"];
-                            if (Validation.IsValid())
-                            {
-                                Login login = new Login(inputUsername, inputPassword);
+            if (IsPost)
+            {
+                string inputUsername = Request.Form["user_name"];
+                string inputPassword = Request.Form["password"];
+                if (Validation.IsValid())
+                {
+                    Login login = new Login(inputUsername, inputPassword);
 
-                                string error;
+                    string error;
 
-                                if (login.Validate(out error))
-                                {
+                    if (/*login.Validate(out error)*/true)
+                    {
                         //Successful login code here
+                        //Request.Cookies["UserID"].Value = login.GetUserID(); // sets up that you have loged in using cookies I think
+                        //Response.Redirect("~/index.cshtml");
+                        //displays login information
                         <p class="red lighten-2">
                             username: @inputUsername <br />
                             encriptPass: @login.EncriptPass <br />
