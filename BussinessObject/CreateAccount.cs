@@ -102,11 +102,18 @@ namespace BussinessObject
             return dataCreateAcc.GetTeams();// returns a string array of the names of teams available
         }
 
-        public bool Valitate(out string errorMsgs)
+        public string GetUserType(int userID)
+        {
+            return dataCreateAcc.getUserType(userID);
+        }
+
+
+        public bool Valitate(out string errorMsgs, out int userID)
         {
             //stoplime's validation code
             // Assuming dataCreateAcc object
             errorMsgs = "";
+            userID = -1;
 
             //***Check if Username exists***
             if (dataCreateAcc.validUsername(userName))//returns true if username already exists
@@ -163,7 +170,7 @@ namespace BussinessObject
             try
             {
                 Debug.WriteLine("Create Account try block");
-                errorMsgs += dataCreateAcc.AddUser(firstName, lastName, userName, encriptPass, email, (int)userType, teamSelect, schoolInput);
+                errorMsgs += dataCreateAcc.AddUser(firstName, lastName, userName, encriptPass, email, (int)userType, teamSelect, schoolInput, out userID);
             }catch(Exception e)
             {
                 errorMsgs += e + " \n";

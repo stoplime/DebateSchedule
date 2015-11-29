@@ -83,12 +83,15 @@
                             break;
                     }
                     string error;
+                    int userID;
 
-                    if (!account.Valitate(out error))
+                    if (!account.Valitate(out error, out userID))
                     {
                         <p class="flow-text red lighten-2">@error</p>
                     }
                     //set user to be loged in code here
+                    Session["UserID"] = userID;
+                    Session["UserType"] = account.GetUserType(userID);
                     //Response.Redirect("~/index.cshtml");
                 }
             }

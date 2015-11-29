@@ -11,6 +11,12 @@
     <div class="container">
         <div class="row">
             <div class="col s12">
+                @{
+                    if (Session["UserID"] != null)
+                    {
+                        <p>session user id: @Session["UserID"]</p>
+                    }
+                }
                 <p class="flow-text">Some info about the Debate</p>
             </div>
         </div>

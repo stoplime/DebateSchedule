@@ -106,6 +106,7 @@
     <Content Include="schedule.cshtml" />
     <Content Include="scores.cshtml" />
     <Content Include="forgotPass.cshtml" />
+    <Content Include="Admin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

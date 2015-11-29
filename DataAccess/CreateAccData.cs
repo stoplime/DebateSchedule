@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace DataAccess
 {
@@ -38,6 +39,24 @@ namespace DataAccess
             dl.SqlConnection.Close();
             return schools;
         }*/
+
+        public string getUserType(int userID)
+        {
+            dl.SqlConnection.Open();
+            string getUserTypeString = "SELECT pers_type FROM Person WHERE pers_usersid='" + userID + "'";
+            SqlCommand sqlc = new SqlCommand(getUserTypeString, dl.SqlConnection);
+            SqlDataReader reader = sqlc.ExecuteReader();
+            SqlString type = "";
+            if (reader.HasRows)
+            {
+                if (reader.Read())
+                {
+                    type = reader.GetSqlString(0);
+                }
+            }
+            dl.SqlConnection.Close();
+            return type.ToString();
+        }
 
         public List<string> GetTeams()
         {
@@ -160,7 +179,7 @@ namespace DataAccess
         #endregion
 
         #region add new user
-        public string AddUser(string firstName, string lastName, string userName, string encriptPass, string email, int userType, string teamSelect, string schoolInput)
+        public string AddUser(string firstName, string lastName, string userName, string encriptPass, string email, int userType, string teamSelect, string schoolInput, out int userID)
         {
             string errorMsgs = "";
             //creates an entry for new user into the database
@@ -181,7 +200,7 @@ namespace DataAccess
                 Debug.WriteLine("added users_email");
 
                 Debug.WriteLine("Created users: "+command.ExecuteNonQuery());
-                int userID = (int)command.Parameters["@users_id"].Value;
+                userID = (int)command.Parameters["@users_id"].Value;
                 
                 /*
                 string personTable;

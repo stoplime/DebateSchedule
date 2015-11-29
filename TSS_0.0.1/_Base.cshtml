@@ -39,11 +39,11 @@
                         }
                         else
                         {
-                            //Change to My Account when loged in
-                            /*switch (switch_on)//pers_type
+                            //Change to logout when loged in
+                            if (Session["UserID"] != null)
                             {
-                                default:
-                            }*/
+                                <li><button class="btn waves-effect waves-light" onclick="@{Session.Abandon();}"></button></li>
+                            }
                         }
                     }
                 </ul>
@@ -55,6 +55,29 @@
                     <li><a href="~/schedule.cshtml">Schedule</a></li>
                     <li><a href="~/scores.cshtml">Score</a></li>
                     <li><a href="~/raking.cshtml">Ranking</a></li>
+                    @{
+                        if (Session["UserType"] != null)
+                        {
+                            string type = (string)Session["UserType"];
+                            switch (type)
+                            {
+                                case "TeamMember":
+                                    <li><a href="~/accountMember.cshtml">My Account</a></li>
+                                    break;
+                                case "SchoolRep":
+                                    <li><a href="~/accountRepresentative.cshtml">My Account</a></li>
+                                    break;
+                                case "Referee":
+                                    <li><a href="~/accountReferee.cshtml">My Account</a></li>
+                                    break;
+                                case "SuperReferee":
+                                    <li><a href="~/accountSuperReferee.cshtml">My Account</a></li>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
                 </ul>
                 <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
             </div>
