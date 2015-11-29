@@ -25,17 +25,21 @@
 
                     string error;
                     int userID;
+                    string type;
 
                     if (login.Validate(out error, out userID))
                     {
                         //Successful login code here
-                        //Request.Cookies["UserID"].Value = login.GetUserID(); // sets up that you have loged in using cookies I think
+                        type = login.GetUserType(userID);
+                        Session["UserID"] = userID;
+                        Session["UserType"] = type;
                         //Response.Redirect("~/index.cshtml");
                         //displays login information
 
                         Debug.WriteLine("userID: " + userID);
                         Debug.WriteLine("username: " + inputUsername);
                         Debug.WriteLine("encriptPass: " + login.EncriptPass);
+                        Debug.WriteLine("UserType: " + type);
                     }
                     else
                     {

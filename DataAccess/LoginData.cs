@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 
 namespace DataAccess
 {
@@ -19,13 +20,31 @@ namespace DataAccess
             dl = new DatabaseLayer();
         }
 
+        public string getUserType(int userID)
+        {
+            dl.SqlConnection.Open();
+            string getUserTypeString = "SELECT pers_type FROM Person WHERE pers_usersid='" + userID + "'";
+            SqlCommand sqlc = new SqlCommand(getUserTypeString, dl.SqlConnection);
+            SqlDataReader reader = sqlc.ExecuteReader();
+            SqlString type = "";
+            if (reader.HasRows)
+            {
+                if (reader.Read())
+                {
+                    type = reader.GetSqlString(0);
+                }
+            }
+            dl.SqlConnection.Close();
+            return type.ToString();
+        }
+
         public bool validUsername(string userName)
         {
             //returns true if username exists in database
             dl.SqlConnection.Open();
-            string getUsername = "SELECT * FROM Users WHERE users_login='" + userName + "'";
+            string getUsername = "SELECT users_id FROM Users WHERE users_login='" + userName + "'";
             SqlCommand sqlc = new SqlCommand(getUsername, dl.SqlConnection);
-            int names = sqlc.ExecuteNonQuery();
+            int names = (int)sqlc.ExecuteScalar();
             if (names > 0)
             {
                 dl.SqlConnection.Close();
@@ -41,7 +60,7 @@ namespace DataAccess
             dl.SqlConnection.Open();
             string getEmail = "SELECT * FROM Users WHERE users_email='" + email + "'";
             SqlCommand sqlc = new SqlCommand(getEmail, dl.SqlConnection);
-            int emails = sqlc.ExecuteNonQuery();
+            int emails = (int)sqlc.ExecuteScalar();
             if (emails > 0)
             {
                 dl.SqlConnection.Close();
@@ -53,6 +72,7 @@ namespace DataAccess
 
         public bool validPass(string username, string pass, bool isEmail, out int userID)
         {
+            userID = -1;
             //returns true if login sequence is correct
             dl.SqlConnection.Open();
             string getPass = "SELECT users_id FROM Users WHERE ";
@@ -71,11 +91,13 @@ namespace DataAccess
             SqlDataReader reader = sqlc.ExecuteReader();
             if (reader.HasRows)
             {
-                userID = reader.GetInt32(0);
+                if (reader.Read())
+                {
+                    userID = reader.GetInt32(0);
+                }
                 dl.SqlConnection.Close();
                 return true;
             }
-            userID = -1;
             dl.SqlConnection.Close();
             return false;
         }

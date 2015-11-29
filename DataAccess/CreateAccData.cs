@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 using System.Configuration;
 using System.Data;
@@ -18,8 +19,8 @@ namespace DataAccess
         {
             dl = new DatabaseLayer();
         }
-
-        public List<string> GetSchools()
+        #region get list
+        /*public List<string> GetSchools()
         {
             //returns an array of all the available school names
             dl.SqlConnection.Open();
@@ -36,13 +37,35 @@ namespace DataAccess
             }
             dl.SqlConnection.Close();
             return schools;
-        }
+        }*/
 
-        public int GetSchoolID(string schoolName)
+        public List<string> GetTeams()
+        {
+            //returns an array of all the available team names
+            dl.SqlConnection.Open();
+            string getTeamString = "SELECT team_name FROM Team";
+            SqlCommand sqlc = new SqlCommand(getTeamString, dl.SqlConnection);
+            SqlDataReader reader = sqlc.ExecuteReader();
+            List<string> teams = new List<string>();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    string temp = reader.GetString(0);
+                    teams.Add(temp);
+                }
+            }
+            dl.SqlConnection.Close();
+            return teams;
+        }
+        #endregion
+
+        #region get ids
+        public int GetSchoolID(string teamName)
         {
             //returns an array of all the available school names
             dl.SqlConnection.Open();
-            string getSchoolString = "SELECT scho_id FROM School WHERE scho_name='" + schoolName + "'";
+            string getSchoolString = "SELECT team_schoolid FROM Team WHERE team_name='" + teamName + "'";
             SqlCommand sqlc = new SqlCommand(getSchoolString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             int id = -1;
@@ -56,25 +79,6 @@ namespace DataAccess
             dl.SqlConnection.Close();
 
             return id;
-        }
-
-        public List<string> GetTeams(string selectedSchool)
-        {
-            //returns an array of all the available team names from the selected school
-            dl.SqlConnection.Open();
-            string getTeamString = "SELECT team_name FROM Teams WHERE team_school='" + selectedSchool + "'";
-            SqlCommand sqlc = new SqlCommand(getTeamString, dl.SqlConnection);
-            SqlDataReader reader = sqlc.ExecuteReader();
-            List<string> teams = new List<string>();
-            while (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    teams.Add(reader.GetString(0));
-                }
-            }
-            dl.SqlConnection.Close();
-            return teams;
         }
 
         public int GetTeamID(string teamName)
@@ -96,7 +100,9 @@ namespace DataAccess
 
             return id;
         }
+        #endregion
 
+        #region Validation code
         public bool validUsername(string userName)
         {
             //returns true if username exists in database
@@ -104,7 +110,7 @@ namespace DataAccess
             string getUsername = "SELECT * FROM Users WHERE users_login='" + userName + "'";
             SqlCommand sqlc = new SqlCommand(getUsername, dl.SqlConnection);
             int names = sqlc.ExecuteNonQuery();
-            
+
             if (names > 0)
             {
                 dl.SqlConnection.Close();
@@ -148,25 +154,36 @@ namespace DataAccess
         public bool validRefCode(string refCode)
         {
             //returns true if referee code is valid
-            
+
             return true;
         }
+        #endregion
 
-        public string AddUser(string firstName, string lastName, string userName, int encriptPass, string email, int userType, string schoolSelect, string teamSelect, string schoolInput)
+        #region add new user
+        public string AddUser(string firstName, string lastName, string userName, string encriptPass, string email, int userType, string teamSelect, string schoolInput)
         {
             string errorMsgs = "";
             //creates an entry for new user into the database
             dl.SqlConnection.Open();
-
+            Debug.WriteLine("~~~~~~~~ pre try block");
             try
             {
-                string usersTable = "INSERT INTO Users(users_login, users_password, users_email, users_createddate) " + "VALUES(@users_login, @users_password, @users_email, @users_createddate)";
+                Debug.WriteLine("pre try statement");
+                string usersTable = "INSERT INTO Users(users_login, users_password, users_email) " + "VALUES(@users_login, @users_password, @users_email)";
+                Debug.WriteLine("created usersTable string");
                 SqlCommand command = new SqlCommand(usersTable, dl.SqlConnection);
+                Debug.WriteLine("set command");
                 command.Parameters.AddWithValue("users_login", userName);
+                Debug.WriteLine("added users_login");
                 command.Parameters.AddWithValue("users_password", encriptPass);
+                Debug.WriteLine("added users_password");
                 command.Parameters.AddWithValue("users_email", email);
-                command.Parameters.AddWithValue("users_createddate", DateTime.Now);
-                command.ExecuteNonQuery();
+                Debug.WriteLine("added users_email");
+
+                Debug.WriteLine("Created users: "+command.ExecuteNonQuery());
+                int userID = (int)command.Parameters["@users_id"].Value;
+                
+                /*
                 string personTable;
                 string schoolTable;
 
@@ -174,12 +191,12 @@ namespace DataAccess
                 {
                     case 1:
                         //Team member
-                        personTable = "INSERT INTO Person(pers_type, pers_firstname, pers_secondname, pers_schoolid, pers_teamid) " + "VALUES(@pers_type, @pers_firstname, @pers_secondname, @pers_schoolid, @pers_teamid)";
+                        personTable = "INSERT INTO Person(pers_type, pers_firstname, pers_lastname, pers_schoolid, pers_teamid, pers_usersid) " + "VALUES(@pers_type, @pers_firstname, @pers_lastname, @pers_schoolid, @pers_teamid, @pers_usersid)";
                         SqlCommand sqlcTeam = new SqlCommand(personTable, dl.SqlConnection);
                         sqlcTeam.Parameters.AddWithValue("pers_type", userType);
                         sqlcTeam.Parameters.AddWithValue("pers_firstname", firstName);
-                        sqlcTeam.Parameters.AddWithValue("pers_secondname", lastName);
-                        int schoolId = GetSchoolID(schoolSelect);
+                        sqlcTeam.Parameters.AddWithValue("pers_lastname", lastName);
+                        int schoolId = GetSchoolID(teamSelect);
                         if (schoolId >= 0)
                         {
                             sqlcTeam.Parameters.AddWithValue("pers_schoolid", schoolId);
@@ -197,6 +214,7 @@ namespace DataAccess
                         {
                             errorMsgs += "Invalid team selected from to the system";
                         }
+                        sqlcTeam.Parameters.AddWithValue("pers_usersid", userID);
                         sqlcTeam.ExecuteNonQuery();
                         break;
                     case 2:
@@ -210,7 +228,7 @@ namespace DataAccess
                         sqlcSchRep.Parameters.AddWithValue("pers_type", userType);
                         sqlcSchRep.Parameters.AddWithValue("pers_firstname", firstName);
                         sqlcSchRep.Parameters.AddWithValue("pers_secondname", lastName);
-                        int newSchoolId = GetSchoolID(schoolInput);
+                        int newSchoolId = (int)sqlcNewSchool.Parameters["@scho_id"].Value;
                         sqlcSchRep.Parameters.AddWithValue("pers_schoolid", newSchoolId);
                         sqlcNewSchool.ExecuteNonQuery();
                         sqlcSchRep.ExecuteNonQuery();
@@ -226,10 +244,11 @@ namespace DataAccess
                         break;
                     default:
                         break;
-                }
+                }*/
             }
             catch (SqlException sqle)
             {
+                Debug.WriteLine("This is where the exception is :" + sqle.ToString());
                 throw sqle;
             }
             finally
@@ -241,5 +260,7 @@ namespace DataAccess
             }
             return errorMsgs;
         }
+        #endregion
+
     }
 }

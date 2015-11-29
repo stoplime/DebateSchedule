@@ -8,6 +8,7 @@ using DataAccess;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace BussinessObject
 {
@@ -15,6 +16,7 @@ namespace BussinessObject
     {
         // properties
         private string username;
+        private LoginData dataLogin;
 
         private string encriptPass;
         //for debug purposes only
@@ -29,26 +31,28 @@ namespace BussinessObject
             this.username = username;
             //this.encriptPass = _PassEncription.Encript(password);
             this.encriptPass = password;
+
+            dataLogin = new LoginData();
         }
 
         //Methods
-        /*public string GetUserID()
+        public string GetUserType(int userID)
         {
-
-        }*/
+            return dataLogin.getUserType(userID);
+        }
 
         public bool Validate(out string errorMsgs, out int userID)
         {
-            LoginData dataLogin = new LoginData();
+            
 
             //stoplime's validation code
             // Assuming dataLogin object
             errorMsgs = "";
-            bool enteredUsername = false;
             bool enteredEmail = false;
-
+            Debug.WriteLine("username: " + username);
+            Debug.WriteLine("username exists: "+dataLogin.validUsername(username));
             //***Check if username exists***
-            if (dataLogin.validUsername(username))//returns true if correct
+            /*if (dataLogin.validUsername(username))//returns true if correct
             {
                 //user entered a username
                 enteredUsername = true;
@@ -65,6 +69,10 @@ namespace BussinessObject
                 errorMsgs = "Invalid Username or Email";
                 userID = -1;
                 return false;
+            }*/
+            if (username.Contains('@'))
+            {
+                enteredEmail = true;
             }
 
             //***Check if password is correct***

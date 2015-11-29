@@ -4,106 +4,102 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess;
+using System.Diagnostics;
 
 namespace BussinessObject
 {
     public class CreateAccount
     {
         private string firstName;
-        public string FirstName
+        /*public string FirstName
         {
             get { return firstName; }
             set { firstName = value; }
-        }
+        }*/
 
         private string lastName;
-        public string LastName
+        /*public string LastName
         {
             get { return lastName; }
             set { lastName = value; }
-        }
+        }*/
 
         private string userName;
-        public string UserName
+        /*public string UserName
         {
             get { return userName; }
             set { userName = value; }
-        }
+        }*/
 
-        private int encriptPass;
-        public int EncriptPass
+        private string encriptPass;
+        /*public string EncriptPass
         {
             get { return encriptPass; }
             set { encriptPass = value; }
-        }
+        }*/
 
         private string email;
-        public string Email
+        /*public string Email
         {
             get { return email; }
             set { email = value; }
-        }
+        }*/
 
         private UserEnum userType;
-        public UserEnum UserTyper
+        /*public UserEnum UserTyper
         {
             get { return userType; }
             set { userType = value; }
-        }
-
-        private string schoolSelect;
-        public string SchoolSelect
-        {
-            get { return schoolSelect; }
-            set { schoolSelect = value; }
-        }
+        }*/
 
         private string teamSelect;
         public string TeamSelect
         {
-            get { return teamSelect; }
+            //get { return teamSelect; }
             set { teamSelect = value; }
         }
 
         private string schoolInput;
         public string SchoolInput
         {
-            get { return schoolInput; }
+            //get { return schoolInput; }
             set { schoolInput = value; }
         }
 
         private string refCode;
         public string RefCode
         {
-            get { return refCode; }
+            //get { return refCode; }
             set { refCode = value; }
         }
 
         private CreateAccData dataCreateAcc;
 
-        public CreateAccount(string firstName, string lastName, string userName, string password, string email)
+        public CreateAccount()
+        {
+            this.firstName = "";
+            this.lastName = "";
+            this.userName = "";
+            //this.encriptPass = _PassEncription.Encript(password);
+            this.encriptPass = "";
+            this.email = "";
+
+            dataCreateAcc = new CreateAccData();
+        }
+
+        public CreateAccount(string firstName, string lastName, string userName, string password, string email):this()
         {
             this.firstName = firstName;
             this.lastName = lastName;
             this.userName = userName;
-            this.encriptPass = _PassEncription.Encript(password);
+            //this.encriptPass = _PassEncription.Encript(password);
+            this.encriptPass = password;
             this.email = email;
-
-            //insert code to make new account here
-            dataCreateAcc = new CreateAccData();
         }
 
-        public List<string> GetSchool()
+        public List<string> GetTeams()
         {
-            //***Get Schools***
-            return dataCreateAcc.GetSchools();// returns all school names in the form of a string array
-            
-        }
-
-        public List<string> GetTeams(string selectedSchool)
-        {
-            //***Get teams from selected school***
-            return dataCreateAcc.GetTeams(selectedSchool);// Accepts a string of the school name selected, returns a string array of the names of teams available
+            return dataCreateAcc.GetTeams();// returns a string array of the names of teams available
         }
 
         public bool Valitate(out string errorMsgs)
@@ -166,7 +162,8 @@ namespace BussinessObject
             //Add to database
             try
             {
-                errorMsgs += dataCreateAcc.AddUser(firstName,lastName,userName,encriptPass,email,(int)userType,schoolSelect,teamSelect,schoolInput);
+                Debug.WriteLine("Create Account try block");
+                errorMsgs += dataCreateAcc.AddUser(firstName, lastName, userName, encriptPass, email, (int)userType, teamSelect, schoolInput);
             }catch(Exception e)
             {
                 errorMsgs += e + " \n";
