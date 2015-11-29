@@ -32,18 +32,13 @@
                 <a href="~/index.cshtml" class="brand-logo center hide-on-med-and-up">T.S.S</a>
                 <ul id="nav-mobile" class="right">
                     @{
-                        //When not loged in
-                        if (true)//Loged in
+                        if (Session["UserID"] != null)//Loged in
                         {
-                            <li><a href="~/login.cshtml">Login</a></li>
+                            <li><a href="~/index.cshtml" onclick="@{Session.Abandon();}">Logout</a></li>
                         }
                         else
                         {
-                            //Change to logout when loged in
-                            if (Session["UserID"] != null)
-                            {
-                                <li><button class="btn waves-effect waves-light" onclick="@{Session.Abandon();}"></button></li>
-                            }
+                            <li><a href="~/login.cshtml">Login</a></li>
                         }
                     }
                 </ul>
