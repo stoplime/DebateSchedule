@@ -38,8 +38,6 @@
                 string schoolInput = "";
                 string selectTeam = "";
                 string refereeCode = "";
-                <p>@Request["user_type"]</p>
-                <p>@Request["user_type"]</p>
                 if (Request["user_type"] != null)
                 {
                     inputUserType = (UserEnum)(int.Parse(Request["user_type"]));
@@ -94,7 +92,7 @@
                         //set user to be loged in code here
                         Session["UserID"] = userID;
                         Session["UserType"] = account.GetUserType(userID);
-                        //Response.Redirect("~/index.cshtml");
+                        Response.Redirect("~/index.cshtml");
 
                     }
                     else

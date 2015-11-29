@@ -9,7 +9,30 @@ namespace BussinessObject
     public class Team
     {
         private string name;
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
         private int id;
+        public int ID
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
+        private int score;
+        public int Score
+        {
+            get { return score; }
+            set { score = value; }
+        }
+
+        public Team()
+        {
+
+        }
 
         public Team(string name, int id)
         {
@@ -17,18 +40,10 @@ namespace BussinessObject
             this.id = id;
         }
 
-        public Team()
-        { }
-
-        public string Name
+        public Team(string name, int id, int score) : this(name, id)
         {
-            get { return name; }
-            set { name = value; }
+            this.score = score;
         }
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        
     }
 }

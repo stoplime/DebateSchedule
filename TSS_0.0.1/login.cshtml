@@ -33,7 +33,8 @@
                         type = login.GetUserType(userID);
                         Session["UserID"] = userID;
                         Session["UserType"] = type;
-                        //Response.Redirect("~/index.cshtml");
+                        Response.Redirect("~/index.cshtml");
+
                         //displays login information
 
                         Debug.WriteLine("userID: " + userID);

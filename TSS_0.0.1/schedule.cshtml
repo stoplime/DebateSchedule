@@ -47,8 +47,8 @@
                             count++;
                             int roundNum = i + 1;
                             <tr>
-                                <td>@count</td>
-                                <td>round @roundNum</td>
+                                <td>@scheduler.RoundTest[i].Matches[j].MatchID</td>
+                                <td>@scheduler.RoundTest[i].Matches[j].Time.ToString()</td>
                                 <td>@scheduler.RoundTest[i].Matches[j].Team1.Name</td>
                                 <td>@scheduler.RoundTest[i].Matches[j].Team2.Name</td>
                             </tr>

@@ -80,43 +80,61 @@ namespace DataAccess
         #endregion
 
         #region get ids
+        private int GetUserID(string userName)
+        {
+            int id;
+            //returns an array of all the available school names
+            //dl.SqlConnection.Open();
+            string getUserString = "SELECT users_id FROM Users WHERE users_login='" + userName + "'";
+            SqlCommand sqlc = new SqlCommand(getUserString, dl.SqlConnection);
+            id = (int)sqlc.ExecuteScalar();
+            return id;
+        }
+
+        private int GetSchoolIDFromName(string schoolName)
+        {
+            //returns an array of all the available school names
+            //dl.SqlConnection.Open();
+            string getSchoolString = "SELECT scho_id FROM School WHERE scho_name='" + schoolName + "'";
+            SqlCommand sqlc = new SqlCommand(getSchoolString, dl.SqlConnection);
+            int id = (int)sqlc.ExecuteScalar();
+            //dl.SqlConnection.Close();
+            return id;
+        }
+        
         public int GetSchoolID(string teamName)
         {
             //returns an array of all the available school names
-            dl.SqlConnection.Open();
+            bool sqlConnected = (dl.SqlConnection.State != ConnectionState.Closed) ? true : false;
+            if (!sqlConnected)
+            {
+                dl.SqlConnection.Open();
+            }
             string getSchoolString = "SELECT team_schoolid FROM Team WHERE team_name='" + teamName + "'";
             SqlCommand sqlc = new SqlCommand(getSchoolString, dl.SqlConnection);
-            SqlDataReader reader = sqlc.ExecuteReader();
-            int id = -1;
-            while (reader.HasRows)
+            int id = (int)sqlc.ExecuteScalar();
+            if (!sqlConnected)
             {
-                while (reader.Read())
-                {
-                    id = reader.GetInt32(0);
-                }
+                dl.SqlConnection.Close();
             }
-            dl.SqlConnection.Close();
-
             return id;
         }
 
         public int GetTeamID(string teamName)
         {
             //returns an array of all the available school names
-            dl.SqlConnection.Open();
-            string getTeamString = "SELECT team_id FROM School WHERE team_name='" + teamName + "'";
-            SqlCommand sqlc = new SqlCommand(getTeamString, dl.SqlConnection);
-            SqlDataReader reader = sqlc.ExecuteReader();
-            int id = -1;
-            while (reader.HasRows)
+            bool sqlConnected = (dl.SqlConnection.State != ConnectionState.Closed) ? true : false;
+            if (!sqlConnected)
             {
-                while (reader.Read())
-                {
-                    id = reader.GetInt32(0);
-                }
+                dl.SqlConnection.Open();
             }
-            dl.SqlConnection.Close();
-
+            string getTeamString = "SELECT team_id FROM Team WHERE team_name='" + teamName + "'";
+            SqlCommand sqlc = new SqlCommand(getTeamString, dl.SqlConnection);
+            int id = (int)sqlc.ExecuteScalar();
+            if (!sqlConnected)
+            {
+                dl.SqlConnection.Close();
+            }
             return id;
         }
         #endregion
@@ -128,7 +146,11 @@ namespace DataAccess
             dl.SqlConnection.Open();
             string getUsername = "SELECT users_id FROM Users WHERE users_login='" + userName + "'";
             SqlCommand sqlc = new SqlCommand(getUsername, dl.SqlConnection);
-            int names = (int)sqlc.ExecuteScalar();
+            int names = 0;
+            if (sqlc.ExecuteScalar() != null)
+            {
+                names = (int)sqlc.ExecuteScalar();
+            }
             if (names > 0)
             {
                 dl.SqlConnection.Close();
@@ -144,7 +166,11 @@ namespace DataAccess
             dl.SqlConnection.Open();
             string getEmail = "SELECT * FROM Users WHERE users_email='" + email + "'";
             SqlCommand sqlc = new SqlCommand(getEmail, dl.SqlConnection);
-            int emails = (int)sqlc.ExecuteScalar();
+            int emails = 0;
+            if (sqlc.ExecuteScalar() != null)
+            {
+                emails = (int)sqlc.ExecuteScalar();
+            }
             if (emails > 0)
             {
                 dl.SqlConnection.Close();
@@ -158,15 +184,21 @@ namespace DataAccess
         {
             //returns true if school name already exists in the data base
             dl.SqlConnection.Open();
-            string schoolExists = "SELECT * FROM School WHERE scho_name='" + school + "'";
+            string schoolExists = "SELECT scho_id FROM School WHERE scho_name='" + school + "'";
             SqlCommand sqlc = new SqlCommand(schoolExists, dl.SqlConnection);
-            if (sqlc.ExecuteNonQuery() > 0)
+            int schools = 0;
+            if (sqlc.ExecuteScalar() != null)
+            {
+                schools = (int)sqlc.ExecuteScalar();
+            }
+            //Debug.WriteLine("found number of schools: " + schools);
+            if (schools > 0)
             {
                 dl.SqlConnection.Close();
-                return false;
+                return true;
             }
             dl.SqlConnection.Close();
-            return true;
+            return false;
         }
 
         public bool validRefCode(string refCode)
@@ -199,9 +231,9 @@ namespace DataAccess
                 Debug.WriteLine("added users_email");
 
                 Debug.WriteLine("Created users: "+command.ExecuteNonQuery());
-                userID = (int)(command.Parameters["@user_id"].Value);
+                userID = GetUserID(userName);
+
                 
-                /*
                 string personTable;
                 string schoolTable;
 
@@ -211,7 +243,7 @@ namespace DataAccess
                         //Team member
                         personTable = "INSERT INTO Person(pers_type, pers_firstname, pers_lastname, pers_schoolid, pers_teamid, pers_usersid) " + "VALUES(@pers_type, @pers_firstname, @pers_lastname, @pers_schoolid, @pers_teamid, @pers_usersid)";
                         SqlCommand sqlcTeam = new SqlCommand(personTable, dl.SqlConnection);
-                        sqlcTeam.Parameters.AddWithValue("pers_type", userType);
+                        sqlcTeam.Parameters.AddWithValue("pers_type", "TeamMember");
                         sqlcTeam.Parameters.AddWithValue("pers_firstname", firstName);
                         sqlcTeam.Parameters.AddWithValue("pers_lastname", lastName);
                         int schoolId = GetSchoolID(teamSelect);
@@ -221,7 +253,7 @@ namespace DataAccess
                         }
                         else
                         {
-                            errorMsgs += "Invalid school selected from to the system";
+                            errorMsgs += "Invalid school selected from the system";
                         }
                         int teamId = GetTeamID(teamSelect);
                         if (teamId >= 0)
@@ -230,39 +262,41 @@ namespace DataAccess
                         }
                         else
                         {
-                            errorMsgs += "Invalid team selected from to the system";
+                            errorMsgs += "Invalid team selected from the system";
                         }
                         sqlcTeam.Parameters.AddWithValue("pers_usersid", userID);
+
                         sqlcTeam.ExecuteNonQuery();
                         break;
                     case 2:
                         //School Rep
-                        personTable = "INSERT INTO Person(pers_type, pers_firstname, pers_secondname, pers_schoolid) " + "VALUES(@pers_type, @pers_firstname, @pers_secondname, @pers_schoolid)";
+                        personTable = "INSERT INTO Person(pers_type, pers_firstname, pers_lastname, pers_schoolid, pers_usersid) " + "VALUES(@pers_type, @pers_firstname, @pers_lastname, @pers_schoolid, @pers_usersid)";
                         schoolTable = "INSERT INTO School(scho_name)" + "VALUES(@scho_name)";
                         SqlCommand sqlcNewSchool = new SqlCommand(schoolTable, dl.SqlConnection);
                         sqlcNewSchool.Parameters.AddWithValue("scho_name", schoolInput);
                         sqlcNewSchool.ExecuteNonQuery();
                         SqlCommand sqlcSchRep = new SqlCommand(personTable, dl.SqlConnection);
-                        sqlcSchRep.Parameters.AddWithValue("pers_type", userType);
+                        sqlcSchRep.Parameters.AddWithValue("pers_type", "SchoolRep");
                         sqlcSchRep.Parameters.AddWithValue("pers_firstname", firstName);
-                        sqlcSchRep.Parameters.AddWithValue("pers_secondname", lastName);
-                        int newSchoolId = (int)sqlcNewSchool.Parameters["@scho_id"].Value;
+                        sqlcSchRep.Parameters.AddWithValue("pers_lastname", lastName);
+                        int newSchoolId = GetSchoolIDFromName(schoolInput);
                         sqlcSchRep.Parameters.AddWithValue("pers_schoolid", newSchoolId);
-                        sqlcNewSchool.ExecuteNonQuery();
+                        sqlcSchRep.Parameters.AddWithValue("pers_usersid", userID);
                         sqlcSchRep.ExecuteNonQuery();
                         break;
                     case 3:
                         //referee
-                        personTable = "INSERT INTO Person(pers_type, pers_firstname, pers_secondname) " + "VALUES(@pers_type, @pers_firstname, @pers_secondname)";
+                        personTable = "INSERT INTO Person(pers_type, pers_firstname, pers_lastname, pers_usersid) " + "VALUES(@pers_type, @pers_firstname, @pers_lastname, @pers_usersid)";
                         SqlCommand sqlcRef = new SqlCommand(personTable, dl.SqlConnection);
-                        sqlcRef.Parameters.AddWithValue("pers_type", userType);
+                        sqlcRef.Parameters.AddWithValue("pers_type", "Referee");
                         sqlcRef.Parameters.AddWithValue("pers_firstname", firstName);
-                        sqlcRef.Parameters.AddWithValue("pers_secondname", lastName);
+                        sqlcRef.Parameters.AddWithValue("pers_lastname", lastName);
+                        sqlcRef.Parameters.AddWithValue("pers_usersid", userID);
                         sqlcRef.ExecuteNonQuery();
                         break;
                     default:
                         break;
-                }*/
+                }//*/
             }
             catch (SqlException sqle)
             {

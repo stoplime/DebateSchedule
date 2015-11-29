@@ -36,11 +36,41 @@ namespace BussinessObject
             set { team2 = value; }
         }
 
+        private int team1Score;
+        public int Team1Score
+        {
+            get { return team1Score; }
+            set { team1Score = value; }
+        }
+
+        private int team2Score;
+        public int Team2Score
+        {
+            get { return team2Score; }
+            set { team2Score = value; }
+        }
+
+        public Match()
+        {
+
+        }
 
         public Match(Team team1, Team team2)
         {
             this.team1 = team1;
             this.team2 = team2;
+        }
+
+        public Match(Team team1, Team team2, int matchID, DateTime time) : this(team1, team2)
+        {
+            this.matchID = matchID;
+            this.time = time;
+        }
+
+        public Match(Team team1, Team team2, int matchID, DateTime time, int team1Score, int team2Score) : this(team1, team2, matchID, time)
+        {
+            this.team1Score = team1Score;
+            this.team2Score = team2Score;
         }
 
         public override string ToString()
