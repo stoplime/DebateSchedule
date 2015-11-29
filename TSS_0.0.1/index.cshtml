@@ -8,6 +8,10 @@
 
 <body>
     <!-- Content -->
+    @{ 
+        string cardColors = "cyan accent-4";
+        string textColors = "text-black";//white-text
+    }
     <div class="container">
         <div class="row">
             <div class="col s12">
@@ -17,7 +21,111 @@
                         <p>session user id: @Session["UserID"]</p>
                     }
                 }
-                <p class="flow-text">Some info about the Debate</p>
+                <h3>Welcome to Team Scheduling System v1.0</h3>
+                <p class="flow-text">TSS is an advance debate team scheduling system designed to maximize user experience and entertainment. Our advanced match pairing algorithm is designed to offer matches quickly and efficiently to all team members in order to allow players to have an active and vibrate experience. Team Scheduling System’s simplistic layout and design of users to promptly join the high school debate leagues.</p>
+            </div>
+        </div>
+        <div class="row">
+            <h4>Welcome to TSS</h4>
+        </div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Dynamic Rescheduling</span>
+                        <p>
+                            Our dynamic rescheduling system will adjust matches in the most optimal way in order to allow the users to have a more enjoyable experience in the case of a match cancellation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Mobile Compatible</span>
+                        <p>
+                            Our application is not only mobile ready, but is designed to provide the most optimal experience for our users on the go.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Easy to Use</span>
+                        <p>
+                            Intuitive, simplified tools help ensure users at all skill levels can utilize and benefit from team scheduling system.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Easy to Join</span>
+                        <p>
+                            New users can quickly and easily sign up here for free.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Easy Accessibility</span>
+                        <p>
+                            Users can login 24/7 from anywhere around the world.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Secure Login</span>
+                        <p>
+                            Each user account is secure with our custom encryption system giving users the most secure account possible.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Easy Tracking Scores</span>
+                        <p>
+                            Our simplified score tracking system allows for easy record keeping.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Simple Communication</span>
+                        <p>
+                            Teams have access to group emails systems allowing for easy mass communication for all group members.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <div class="card @cardColors">
+                    <div class="card-content @textColors">
+                        <span class="card-title">Automatic Scheduling</span>
+                        <p>
+                            Our automated matchmaking system pairs teams against each other in order to maximize player involvement.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

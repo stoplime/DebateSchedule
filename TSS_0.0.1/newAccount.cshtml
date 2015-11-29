@@ -38,10 +38,13 @@
                 string schoolInput = "";
                 string selectTeam = "";
                 string refereeCode = "";
+                <p>@Request["user_type"]</p>
+                <p>@Request["user_type"]</p>
                 if (Request["user_type"] != null)
                 {
                     inputUserType = (UserEnum)(int.Parse(Request["user_type"]));
                 }
+
                 switch (inputUserType)
                 {
                     case UserEnum.Null:
@@ -64,6 +67,7 @@
                 if (Validation.IsValid())
                 {
                     account = new CreateAccount(inputFirstName, inputLastName, inputUsername, inputPassword, inputEmail);
+                    account.UserType = inputUserType;
                     switch (inputUserType)
                     {
                         case UserEnum.Null:
@@ -85,14 +89,18 @@
                     string error;
                     int userID;
 
-                    if (!account.Valitate(out error, out userID))
+                    if (account.Valitate(out error, out userID))
+                    {
+                        //set user to be loged in code here
+                        Session["UserID"] = userID;
+                        Session["UserType"] = account.GetUserType(userID);
+                        //Response.Redirect("~/index.cshtml");
+
+                    }
+                    else
                     {
                         <p class="flow-text red lighten-2">@error</p>
                     }
-                    //set user to be loged in code here
-                    Session["UserID"] = userID;
-                    Session["UserType"] = account.GetUserType(userID);
-                    //Response.Redirect("~/index.cshtml");
                 }
             }
         }

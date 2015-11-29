@@ -46,11 +46,11 @@ namespace BussinessObject
         }*/
 
         private UserEnum userType;
-        /*public UserEnum UserTyper
+        public UserEnum UserType
         {
-            get { return userType; }
+            //get { return userType; }
             set { userType = value; }
-        }*/
+        }
 
         private string teamSelect;
         public string TeamSelect

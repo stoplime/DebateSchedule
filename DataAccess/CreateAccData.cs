@@ -126,10 +126,9 @@ namespace DataAccess
         {
             //returns true if username exists in database
             dl.SqlConnection.Open();
-            string getUsername = "SELECT * FROM Users WHERE users_login='" + userName + "'";
+            string getUsername = "SELECT users_id FROM Users WHERE users_login='" + userName + "'";
             SqlCommand sqlc = new SqlCommand(getUsername, dl.SqlConnection);
-            int names = sqlc.ExecuteNonQuery();
-
+            int names = (int)sqlc.ExecuteScalar();
             if (names > 0)
             {
                 dl.SqlConnection.Close();
@@ -145,7 +144,7 @@ namespace DataAccess
             dl.SqlConnection.Open();
             string getEmail = "SELECT * FROM Users WHERE users_email='" + email + "'";
             SqlCommand sqlc = new SqlCommand(getEmail, dl.SqlConnection);
-            int emails = sqlc.ExecuteNonQuery();
+            int emails = (int)sqlc.ExecuteScalar();
             if (emails > 0)
             {
                 dl.SqlConnection.Close();
@@ -200,7 +199,7 @@ namespace DataAccess
                 Debug.WriteLine("added users_email");
 
                 Debug.WriteLine("Created users: "+command.ExecuteNonQuery());
-                userID = (int)command.Parameters["@users_id"].Value;
+                userID = (int)(command.Parameters["@user_id"].Value);
                 
                 /*
                 string personTable;
