@@ -53,9 +53,20 @@ namespace BussinessObject
                 teams.Add(new Team(teamNames[i], teamIDs[i]));
             }
             List<Round> rounds = ReSchedule(teams, start);
-            
+            List<DateTime> times = new List<DateTime>();
+            List<int> team1ID = new List<int>();
+            List<int> team2ID = new List<int>();
 
-            return true;
+            for (int i = 0; i < rounds.Count; i++)
+            {
+                for (int j = 0; j < rounds[i].Matches.Count; j++)
+                {
+                    times.Add(rounds[i].Matches[j].Time);
+                    team1ID.Add(rounds[i].Matches[j].Team1.ID);
+                    team2ID.Add(rounds[i].Matches[j].Team2.ID);
+                }
+            }
+            return accessToData.UpdateSchedule(times, team1ID, team2ID);
         }
 
         private static List<DateTime> generateDateTimes(DateTime start, int rounds)

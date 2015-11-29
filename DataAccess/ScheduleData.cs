@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 using System.Configuration;
 using System.Data;
@@ -135,10 +136,20 @@ namespace DataAccess
         #endregion
 
 
-        public bool UpdateSchedule()
+        public bool UpdateSchedule(List<DateTime> times, List<int> team1ID, List<int> team2ID)
         {
             dl.SqlConnection.Open();
+            string scheduleTable = "INSERT INTO Schedule(sche_datetime, sche_team1, sche_team2) " + "VALUES(@sche_datetime, @sche_team1, @sche_team2)";
+            SqlCommand command = new SqlCommand(scheduleTable, dl.SqlConnection);
+            for (int i = 0; i < times.Count; i++)
+            {
+                command.Parameters.AddWithValue("sche_datetime", (SqlDateTime)times[i]);
+                command.Parameters.AddWithValue("sche_team1", team1ID[i]);
+                command.Parameters.AddWithValue("sche_team2", team2ID[i]);
 
+                Debug.WriteLine("Created schedule " + i + ": " + command.ExecuteNonQuery());
+                command.Parameters.Clear();
+            }
 
             dl.SqlConnection.Close();
             return true;

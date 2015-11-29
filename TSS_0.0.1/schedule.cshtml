@@ -15,6 +15,7 @@
         @{
             bool edit = false;
             Scheduler scheduler = new Scheduler();
+            DateTime start = DateTime.Now;
             /*string userID = Request.QueryString["user_id"];
 
             if (userID != "")
@@ -24,7 +25,7 @@
             */
             //if (scheduler.isUserSuper())
             //{
-                <button class="btn waves-effect waves-light" type="submit" onclick="@{edit=true;}">Edit<i class="material-icons prefix">mode_edit</i></button>@edit
+                <button class="btn waves-effect waves-light" type="submit" onclick="@{scheduler.autoReschedule(start);}">Edit<i class="material-icons prefix">mode_edit</i></button>@edit
             //}
         }
         <table id="schedule" class="bordered">

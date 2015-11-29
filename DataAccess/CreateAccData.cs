@@ -218,17 +218,17 @@ namespace DataAccess
             Debug.WriteLine("~~~~~~~~ pre try block");
             try
             {
-                Debug.WriteLine("pre try statement");
+                //Debug.WriteLine("pre try statement");
                 string usersTable = "INSERT INTO Users(users_login, users_password, users_email) " + "VALUES(@users_login, @users_password, @users_email)";
-                Debug.WriteLine("created usersTable string");
+                //Debug.WriteLine("created usersTable string");
                 SqlCommand command = new SqlCommand(usersTable, dl.SqlConnection);
-                Debug.WriteLine("set command");
+                //Debug.WriteLine("set command");
                 command.Parameters.AddWithValue("users_login", userName);
-                Debug.WriteLine("added users_login");
+                //Debug.WriteLine("added users_login");
                 command.Parameters.AddWithValue("users_password", encriptPass);
-                Debug.WriteLine("added users_password");
+                //Debug.WriteLine("added users_password");
                 command.Parameters.AddWithValue("users_email", email);
-                Debug.WriteLine("added users_email");
+                //Debug.WriteLine("added users_email");
 
                 Debug.WriteLine("Created users: "+command.ExecuteNonQuery());
                 userID = GetUserID(userName);
