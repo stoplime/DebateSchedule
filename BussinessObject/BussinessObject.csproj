@@ -44,6 +44,7 @@
     <Compile Include="AccountReferee.cs" />
     <Compile Include="CreateAccount.cs" />
     <Compile Include="ForgotPass.cs" />
+    <Compile Include="GetUserType.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="Round.cs" />

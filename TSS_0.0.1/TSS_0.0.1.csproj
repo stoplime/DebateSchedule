@@ -116,7 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="_AppStart.cshtml" />
-    <None Include="_Base.cshtml" />
+    <None Include="Base.cshtml" />
     <None Include="login.cshtml" />
     <Content Include="materialize.css" />
     <Content Include="Web.config" />

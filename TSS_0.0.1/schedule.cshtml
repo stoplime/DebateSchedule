@@ -5,7 +5,7 @@
 
 <head>
     <!-- Load Base -->
-    @RenderPage("_Base.cshtml")
+    @RenderPage("Base.cshtml")
 </head>
 
 <body>
@@ -15,18 +15,19 @@
         @{
             bool edit = false;
             Scheduler scheduler = new Scheduler();
+            GetUserType getType = new GetUserType();
             DateTime start = DateTime.Now;
-            /*string userID = Request.QueryString["user_id"];
+            string userID = Request.QueryString["user_id"];
 
             if (userID != "")
             {
-                scheduler.setUserID(userID);
+                getType.setUserID(userID);
+                if (getType.isUserSuper())
+                {
+                    <button class="btn waves-effect waves-light" type="submit">Edit<i class="material-icons prefix">mode_edit</i></button>
+                }
             }
-            */
-            //if (scheduler.isUserSuper())
-            //{
-                <button class="btn waves-effect waves-light" type="submit" onclick="@{scheduler.autoReschedule(start);}">Edit<i class="material-icons prefix">mode_edit</i></button>@edit
-            //}
+
         }
         <table id="schedule" class="bordered">
             <thead>
@@ -40,23 +41,20 @@
 
             <tbody>
                 @{
-                    int count = 0;
-                    for (int i = 0; i < scheduler.RoundTest.Count; i++)
+                    //int count = 0;
+                    for (int i = 0; i < scheduler.NumberOfRows; i++)
                     {
-                        for (int j = 0; j < scheduler.RoundTest[i].Matches.Count; j++)
-                        {
-                            count++;
-                            int roundNum = i + 1;
-                            <tr>
-                                <td>@scheduler.RoundTest[i].Matches[j].MatchID</td>
-                                <td>@scheduler.RoundTest[i].Matches[j].Time.ToString()</td>
-                                <td>@scheduler.RoundTest[i].Matches[j].Team1.Name</td>
-                                <td>@scheduler.RoundTest[i].Matches[j].Team2.Name</td>
-                            </tr>
-                        }
+                        //count++;
+                        //int roundNum = i + 1;
+                        <tr>
+                            <td>@scheduler.MatchIDs[i]</td>
+                            <td>@scheduler.MatchTimes[i].ToString()</td>
+                            <td>@scheduler.MatchTeam1Names[i]</td>
+                            <td>@scheduler.MatchTeam2Names[i]</td>
+                        </tr>
                     }
                 }
-                
+
             </tbody>
         </table>
     </div>

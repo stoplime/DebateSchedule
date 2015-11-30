@@ -46,6 +46,7 @@
     <Compile Include="AccountRefereeData.cs" />
     <Compile Include="CreateAccData.cs" />
     <Compile Include="DatabaseLayer.cs" />
+    <Compile Include="GetUserTypeData.cs" />
     <Compile Include="LoginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleData.cs" />

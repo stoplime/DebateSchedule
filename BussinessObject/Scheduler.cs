@@ -11,35 +11,57 @@ namespace BussinessObject
 {
     public class Scheduler
     {
-        public List<Round> RoundTest;
+        //public List<Round> RoundTest;
         private ScheduleData accessToData;
 
+        private int numberOfRows;
+        public int NumberOfRows
+        {
+            get { return numberOfRows; }
+        }
+
+        private List<int> matchIDs;
+        public List<int> MatchIDs
+        {
+            get { return matchIDs; }
+        }
+
+        private List<DateTime> matchTimes;
+        public List<DateTime> MatchTimes
+        {
+            get { return matchTimes; }
+        }
+
+        private List<string> matchTeam1Names;
+        public List<string> MatchTeam1Names
+        {
+            get { return matchTeam1Names; }
+        }
+
+        private List<string> matchTeam2Names;
+        public List<string> MatchTeam2Names
+        {
+            get { return matchTeam2Names; }
+        }
 
         public Scheduler()
         {
             accessToData = new ScheduleData();
-            List<Team> test = new List<Team>();
-            for (int i = 1; i <= 10; i++)
+            numberOfRows = accessToData.GetScheduleRows(out matchIDs);
+            matchTimes = new List<DateTime>();
+            matchTeam1Names = new List<string>();
+            matchTeam2Names = new List<string>();
+            for (int i = 0; i < numberOfRows; i++)
             {
-                test.Add(new Team("A"+i, i));
+                DateTime timeTemp;
+                int team1IdTemp;
+                int team2IdTemp;
+                accessToData.GetScheduleData(matchIDs[i], out timeTemp, out team1IdTemp, out team2IdTemp);
+                matchTimes.Add(timeTemp);
+                matchTeam1Names.Add(accessToData.GetTeamName(team1IdTemp));
+                matchTeam2Names.Add(accessToData.GetTeamName(team2IdTemp));
             }
-            RoundTest = ReSchedule(test, DateTime.Now);
-        }
-
-
-        public void setUserID(string userID)
-        {
-            accessToData.UserID = userID;
-        }
-
-
-        public bool isUserSuper()
-        {
-            if (accessToData.UserType == "SuperReferee")
-            {
-                return true;
-            }
-            return false;
+            
         }
 
         public bool autoReschedule(DateTime start)
@@ -57,16 +79,21 @@ namespace BussinessObject
             List<int> team1ID = new List<int>();
             List<int> team2ID = new List<int>();
 
+            numberOfRows = 0;
             for (int i = 0; i < rounds.Count; i++)
             {
                 for (int j = 0; j < rounds[i].Matches.Count; j++)
                 {
-                    times.Add(rounds[i].Matches[j].Time);
-                    team1ID.Add(rounds[i].Matches[j].Team1.ID);
-                    team2ID.Add(rounds[i].Matches[j].Team2.ID);
+                    if (rounds[i].Matches[j].Team1.ID > 0 && rounds[i].Matches[j].Team2.ID > 0)
+                    {
+                        times.Add(rounds[i].Matches[j].Time);
+                        team1ID.Add(rounds[i].Matches[j].Team1.ID);
+                        team2ID.Add(rounds[i].Matches[j].Team2.ID);
+                        numberOfRows++;
+                    }
                 }
             }
-            return accessToData.UpdateSchedule(times, team1ID, team2ID);
+            return accessToData.autoUpdateSchedule(times, team1ID, team2ID);
         }
 
         private static List<DateTime> generateDateTimes(DateTime start, int rounds)
