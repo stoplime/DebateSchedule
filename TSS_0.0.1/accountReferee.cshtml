@@ -10,23 +10,23 @@
     <!-- Content -->
     <div class="container">
         @{
-            Validation.RequireField("user_name", "Please enter a Username");
-            Validation.RequireField("password", "Please enter a Password");
+            //Validation.RequireField("user_name", "Please enter a Username");
+            //Validation.RequireField("password", "Please enter a Password");
 
-            
+            AccountReferee referee = new AccountReferee();
+            /*
+                        if (IsPost)
+                        {
+                            string inputUsername = Request.Form["user_name"];
+                            string inputPassword = Request.Form["password"];
+                            if (Validation.IsValid())
+                            {
+                                Login login = new Login(inputUsername, inputPassword);
 
-            if (IsPost)
-            {
-                string inputUsername = Request.Form["user_name"];
-                string inputPassword = Request.Form["password"];
-                if (Validation.IsValid())
-                {
-                    Login login = new Login(inputUsername, inputPassword);
+                                string error;
 
-                    string error;
-
-                    if (login.Validate(out error))
-                    {
+                                if (login.Validate(out error))
+                                {
                         //Successful login code here
                         <p class="red lighten-2">
                             username: @inputUsername <br />
@@ -41,30 +41,31 @@
                         </p>
                     }
                 }
-            }
+            }*/
         }
         <h3>Referee Name</h3>
         <div class="row">
             <div class="col s10 offset-s1 blue lighten-5">
                 <table>
-                    <tr>
-                    <td>
-                    	<h4>Match ID</h4>
-                    </td>
-                    </tr>
-                    <tr>
-                    	<td>Date & time</td>
-                    </tr>
-                    <tr>
-                    	<td>Location</td>
-                    </tr>
-                    <tr>
-                        <td>Team 1</td>
-                    </tr>
-                    <tr>
-                    	<td>Team 2</td>
-                    </tr>
-
+                    @{
+                        for (int i = 0; i < referee.MatchIDs.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <h4>Match: @referee.MatchIDs[i]</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Date & time: @referee.MatchTimes[i].ToString()</td>
+                            </tr>
+                            <tr>
+                                <td>Team 1: @referee.MatchTeam1Names[i]</td>
+                            </tr>
+                            <tr>
+                                <td>Team 2: @referee.MatchTeam2Names[i]</td>
+                            </tr>
+                        }
+                    }
                 </table>
             </div>
         </div>
