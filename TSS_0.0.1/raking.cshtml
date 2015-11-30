@@ -20,12 +20,20 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>Einstien</td>
-                    <td>9001</td>
-                    <td>9000/9001</td>
-                </tr>
-                
+                @{
+                    Rank rank = new Rank();
+                    for (int i = 0; i < rank.TeamNames.Count; i++)
+                    {
+                        decimal ratio = (decimal)rank.TeamWins[i] / rank.TeamTotalMatches[i];
+                        ratio *= 100;
+                        int percentage = (int)(ratio - (ratio % 1));
+                        <tr>
+                            <td>@rank.TeamNames[i]</td>
+                            <td>@rank.TeamScores[i]</td>
+                            <td>@percentage %</td>
+                        </tr>
+                    }
+                }
             </tbody>
         </table>
     </div>

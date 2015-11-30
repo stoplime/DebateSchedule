@@ -24,6 +24,9 @@
 </head>
 
 <body>
+    <script>
+        var pressedLogout = false;
+    </script>
     <div class="navbar-fixed">
         <nav>
             <!-- Header -->
@@ -31,10 +34,11 @@
                 <a href="~/index.cshtml" class="brand-logo center hide-on-small-only">Team Scheduling System</a>
                 <a href="~/index.cshtml" class="brand-logo center hide-on-med-and-up">T.S.S</a>
                 <ul id="nav-mobile" class="right">
+                    
                     @{
                         if (Session["UserID"] != null)//Loged in
                         {
-                            <li><a href="~/index.cshtml" onclick="@{Session.Abandon();}">Logout</a></li>
+                            <li><a href="~/index.cshtml" onclick="pressedLogout=false">Logout</a></li>
                         }
                         else
                         {
@@ -93,6 +97,13 @@
             edge: 'left', // Choose the horizontal origin
             closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
         });
+    </script>
+    <script type="text/javascript">
+        function logout() {
+            @{
+                //Session.Clear();
+            }
+        }
     </script>
 
 </body>

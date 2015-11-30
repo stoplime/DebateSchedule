@@ -18,13 +18,15 @@
             GetUserType getType = new GetUserType();
             DateTime start = DateTime.Now;
             string userID = (string)Session["UserType"];
-            scheduler.autoReschedule(start);
+            //scheduler.autoReschedule(start);
             if (userID != "")
             {
                 getType.setUserID(userID);
                 if (getType.isUserSuper())
                 {
-                    <button class="btn waves-effect waves-light" type="submit" onclick="@{Session["EditSchedule"] = true;} ">Edit<i class="material-icons prefix">mode_edit</i></button>
+                    <button class="btn waves-effect waves-light" type="submit" onclick="@{
+                        //Session["EditSchedule"] = true;
+                        } ">Edit<i class="material-icons prefix">mode_edit</i></button>
                 }
         }
 

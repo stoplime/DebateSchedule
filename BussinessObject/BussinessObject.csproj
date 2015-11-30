@@ -47,6 +47,7 @@
     <Compile Include="GetUserType.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Match.cs" />
+    <Compile Include="Rank.cs" />
     <Compile Include="Round.cs" />
     <Compile Include="Scheduler.cs" />
     <Compile Include="Scores.cs" />

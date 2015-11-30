@@ -49,6 +49,7 @@
     <Compile Include="GetUserTypeData.cs" />
     <Compile Include="LoginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RankData.cs" />
     <Compile Include="ScheduleData.cs" />
     <Compile Include="ScoresData.cs" />
   </ItemGroup>
