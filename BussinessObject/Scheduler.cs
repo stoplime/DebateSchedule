@@ -66,6 +66,14 @@ namespace BussinessObject
 
         public bool autoReschedule(DateTime start)
         {
+            //delete previous schedule
+            List<int> previousScheduleIDs;
+            accessToData.GetScheduleRows(out previousScheduleIDs);
+            for (int i = 0; i < previousScheduleIDs.Count; i++)
+            {
+                accessToData.DeleteMatch(previousScheduleIDs[i]);
+            }
+            //create schedule
             List<int> teamIDs;
             List<string> teamNames;
             List<Team> teams = new List<Team>();
@@ -129,7 +137,7 @@ namespace BussinessObject
         {
             if (listTeam.Count % 2 != 0)
             {
-                listTeam.Add(new Team("~PlaceHolder~",0));
+                listTeam.Add(new Team("~PlaceHolder~", 0));
             }
             List<Round> result = new List<Round>();
             int numberOfRounds = (listTeam.Count - 1);

@@ -13,25 +13,31 @@
     <div class="container">
         <h4>Match Schedule</h4>
         @{
-            bool edit = false;
+            Session["EditSchedule"] = false;
             Scheduler scheduler = new Scheduler();
             GetUserType getType = new GetUserType();
             DateTime start = DateTime.Now;
-            string userID = Request.QueryString["user_id"];
-
+            string userID = (string)Session["UserType"];
+            scheduler.autoReschedule(start);
             if (userID != "")
             {
                 getType.setUserID(userID);
                 if (getType.isUserSuper())
                 {
-                    <button class="btn waves-effect waves-light" type="submit">Edit<i class="material-icons prefix">mode_edit</i></button>
+                    <button class="btn waves-effect waves-light" type="submit" onclick="@{Session["EditSchedule"] = true;} ">Edit<i class="material-icons prefix">mode_edit</i></button>
                 }
-            }
+        }
 
         }
         <table id="schedule" class="bordered">
             <thead>
                 <tr>
+                    @{
+                        if ((bool)Session["EditSchedule"])
+                        {
+                            <th data-field="edit">&nbsp;</th>
+                        }
+                    }
                     <th data-field="id">Match ID</th>
                     <th data-field="time">Time</th>
                     <th data-field="team1">Team1</th>
@@ -42,11 +48,17 @@
             <tbody>
                 @{
                     //int count = 0;
-                    for (int i = 0; i < scheduler.NumberOfRows; i++)
+                    for (int i = 0; i < scheduler.MatchIDs.Count; i++)
                     {
                         //count++;
                         //int roundNum = i + 1;
                         <tr>
+                            @{
+                                if ((bool)Session["EditSchedule"])
+                                {
+                                    <td><a href="@Href("~/UpdateSchedule", scheduler.MatchIDs[i])">Edit</a></td>
+                                }
+                            }
                             <td>@scheduler.MatchIDs[i]</td>
                             <td>@scheduler.MatchTimes[i].ToString()</td>
                             <td>@scheduler.MatchTeam1Names[i]</td>

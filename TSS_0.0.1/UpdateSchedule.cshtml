@@ -1,0 +1,138 @@
+﻿@using BussinessObject;
+@using DataAccess;
+
+<html>
+
+<head>
+    <!-- Load Base -->
+    @RenderPage("Base.cshtml")
+</head>
+
+<body>
+    <!-- Content -->
+    <div class="container">
+        <h4>Update Schedule</h4>
+        @{
+            Validation.RequireField("MatchTime", "A match time is required.");
+            Validation.RequireField("Team1", "Team1 is required.");
+            Validation.RequireField("Team2", "Team2 is required.");
+
+            DateTime MatchTime = DateTime.MinValue;
+            string Team1 = "";
+            string Team2 = "";
+
+            string MatchId = UrlData[0];
+            if (MatchId.IsEmpty())
+            {
+                Response.Redirect("~/schedule.cshtml");
+            }
+
+            ScheduleData accessData = new ScheduleData();
+
+            if (IsPost && Validation.IsValid())
+            {
+                MatchTime = Request["MatchTime"].AsDateTime();
+                Team1 = Request["Team1"];
+                Team2 = Request["Team2"];
+                accessData.UpdateMatch(int.Parse(MatchId), MatchTime, Team1, Team2);
+                Response.Redirect(@Href("~/schedule.cshtml"));
+            }
+            else
+            {
+                int Team1ID;
+                int Team2ID;
+                accessData.GetScheduleData(int.Parse(MatchId), out MatchTime, out Team1ID, out Team2ID);
+                Team1 = accessData.GetTeamName(Team1ID);
+                Team2 = accessData.GetTeamName(Team2ID);
+            }
+
+            GetUserType getType = new GetUserType();
+            DateTime start = DateTime.Now;
+            string userID = Request.QueryString["user_id"];
+
+            if (userID != "")
+            {
+                getType.setUserID(userID);
+                if (!getType.isUserSuper())
+                {
+                    Response.Redirect("~/schedule.cshtml");
+                }
+            }
+
+        }
+        <form class="col s12" method="post" action="">
+            <fieldset>
+                <div class="row">
+                    <div class="input-field col s12 m6 l4">
+                        <input name="MatchTime" type="text" class="validate" value="@MatchTime">
+                        <label for="MatchTime">Match Time</label>
+                        <p class="red-text lighten-2">@Html.ValidationMessage("MatchTime")</p>
+                    </div>
+                    <div class="input-field col s12 m6 l4">
+                        <select name="Team1">
+                            <option value="0" disabled>Select a Team</option>
+                            @{
+                                List<string> team1s;
+                                List<int> team1IDs;
+                                accessData.GetTeams(out team1IDs, out team1s);
+                                for (int i = 0; i < team1s.Count; i++)
+                                {
+                                    if (team1s[i] == Team1)
+                                    {
+                                        <option value="@team1IDs[i]" selected>@team1s[i]</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@team1IDs[i]">@team1s[i]</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <p class="red-text lighten-2">@Html.ValidationMessage("Team1")</p>
+                    </div>
+                    <div class="input-field col s12 m12 l4">
+                        <select name="Team2">
+                            <option value="0" disabled>Select a Team</option>W
+                            @{
+                                List<string> team2s;
+                                List<int> team2IDs;
+                                accessData.GetTeams(out team2IDs, out team2s);
+                                for (int i = 0; i < team2s.Count; i++)
+                                {
+                                    if (team2s[i] == Team2)
+                                    {
+                                        <option value="@team2IDs[i]" selected>@team2s[i]</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@team2IDs[i]">@team2s[i]</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <p class="red-text lighten-2">@Html.ValidationMessage("Team2")</p>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col s6 m4 l4">
+                        <a href="~/schedule.cshtml" class="btn waves-effect waves-light">Cancel</a>
+                    </div>
+                    <div class="col s6 m4 l4">
+                        <button class="btn waves-effect waves-light" type="submit" name="update">Update</button>
+                    </div>
+                    <div class="col s6 m4 l4">
+                        <button class="btn waves-effect waves-light" onclick="deleteMatch()" name="delete">Delete</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+       <script type="text/javascript">
+           function deleteMatch() {
+               @accessData.DeleteMatch(int.Parse(MatchId));
+           }
+       </script>
+    </div>
+
+</body>
+
+</html>

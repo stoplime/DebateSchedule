@@ -59,7 +59,7 @@ namespace DataAccess
         public int GetScheduleRows(out List<int> matchIDs)
         {
             dl.SqlConnection.Open();
-            string getRowsString = "SELECT sche_id FROM Schedule";
+            string getRowsString = "SELECT sche_id FROM Schedule WHERE sche_deleted IS NULL";
             SqlCommand sqlc = new SqlCommand(getRowsString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             matchIDs = new List<int>();
@@ -175,7 +175,7 @@ namespace DataAccess
         public void GetTeams(out List<int> teamIDs, out List<string> teamNames)
         {
             dl.SqlConnection.Open();
-            string getTeamIDString = "SELECT team_id, team_name FROM Team";
+            string getTeamIDString = "SELECT team_id, team_name FROM Team WHERE team_deleted IS NULL";
             SqlCommand sqlc = new SqlCommand(getTeamIDString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             teamIDs = new List<int>();
@@ -189,6 +189,38 @@ namespace DataAccess
                 }
             }
             dl.SqlConnection.Close();
+        }
+
+        public bool UpdateMatch(int matchID, DateTime matchTime, string team1, string team2)
+        {
+            dl.SqlConnection.Open();
+            string getTeam1IDString = "SELECT team_id FROM Team WHERE team_name='" + team1 + "'";
+            string getTeam2IDString = "SELECT team_id FROM Team WHERE team_name='" + team2 + "'";
+            SqlCommand sqlcTeam1 = new SqlCommand(getTeam1IDString, dl.SqlConnection);
+            SqlCommand sqlcTeam2 = new SqlCommand(getTeam2IDString, dl.SqlConnection);
+            int team1ID = (int)sqlcTeam1.ExecuteScalar();
+            int team2ID = (int)sqlcTeam2.ExecuteScalar();
+            string updateMatchTable = "UPDATE Schedule SET sche_datetime=@sche_datetime, sche_team1=@sche_team1, sche_team2=@sche_team2 WHERE sche_id=@sche_id";
+            SqlCommand sqlcUpdate = new SqlCommand(updateMatchTable, dl.SqlConnection);
+            sqlcUpdate.Parameters.AddWithValue("sche_datetime", matchTime);
+            sqlcUpdate.Parameters.AddWithValue("sche_team1", team1);
+            sqlcUpdate.Parameters.AddWithValue("sche_team2", team2);
+            sqlcUpdate.Parameters.AddWithValue("sche_id", matchID);
+            sqlcUpdate.ExecuteNonQuery();
+            dl.SqlConnection.Close();
+            return true;
+        }
+
+        public bool DeleteMatch(int matchID)
+        {
+            dl.SqlConnection.Open();
+            string deleteMatchTable = "UPDATE Schedule SET sche_deleted=@sche_deleted WHERE sche_id=@sche_id";
+            SqlCommand sqlcUpdate = new SqlCommand(deleteMatchTable, dl.SqlConnection);
+            sqlcUpdate.Parameters.AddWithValue("sche_deleted", 'X');
+            sqlcUpdate.Parameters.AddWithValue("sche_id", matchID);
+            sqlcUpdate.ExecuteNonQuery();
+            dl.SqlConnection.Close();
+            return true;
         }
         
         public bool autoUpdateSchedule(List<DateTime> times, List<int> team1ID, List<int> team2ID)

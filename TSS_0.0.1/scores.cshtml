@@ -22,30 +22,21 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>01</td>
-                    <td>01/01/0001 00:00am</td>
-                    <td>Pi</td>
-                    <td>3.14</td>
-                    <td>Tau</td>
-                    <td>6.28</td>
-                </tr>
-                <tr>
-                    <td>02</td>
-                    <td>01/01/0001 01:00am</td>
-                    <td>Einstien</td>
-                    <td>54</td>
-                    <td>Newton</td>
-                    <td>55</td>
-                </tr>
-                <tr>
-                    <td>03</td>
-                    <td>01/01/0001 02:00am</td>
-                    <td>Godzilla</td>
-                    <td>5968</td>
-                    <td>Chuck Norris</td>
-                    <td>999999999999</td>
-                </tr>
+                @{
+                    Scores scores = new Scores();
+                    
+                    for (int i = 0; i < scores.MatchIDs.Count; i++)
+                    {
+                        <tr>
+                            <td>@scores.MatchIDs[i]</td>
+                            <td>@scores.DateTimes[i]</td>
+                            <td>@scores.Team1s[i]</td>
+                            <td>@scores.Team1Scores[i]</td>
+                            <td>@scores.Team2s[i]</td>
+                            <td>@scores.Team2Scores[i]</td>
+                        </tr>
+                    }
+                }
             </tbody>
         </table>
     </div>
