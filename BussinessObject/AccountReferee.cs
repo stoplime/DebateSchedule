@@ -11,7 +11,13 @@ namespace BussinessObject
     public class AccountReferee
     {
         private AccountRefereeData accessData;
+        private int refereeID;
+        public int RefereeID
+        {
+            set { refereeID = value; }
+        }
 
+        // The unhosted matches
         private List<int> matchIDs;
         public List<int> MatchIDs
         {
@@ -35,15 +41,44 @@ namespace BussinessObject
         {
             get { return matchTeam2Names; }
         }
+        // The matches that are considered the referee's hosting
+        private List<int> myMatchIDs;
+        public List<int> MyMatchIDs
+        {
+            get { return myMatchIDs; }
+        }
 
+        private List<DateTime> myMatchTimes;
+        public List<DateTime> MyMatchTimes
+        {
+            get { return myMatchTimes; }
+        }
+
+        private List<string> myMatchTeam1Names;
+        public List<string> MyMatchTeam1Names
+        {
+            get { return myMatchTeam1Names; }
+        }
+
+        private List<string> myMatchTeam2Names;
+        public List<string> MyMatchTeam2Names
+        {
+            get { return myMatchTeam2Names; }
+        }
+
+        #region constructor
         public AccountReferee()
         {
             accessData = new AccountRefereeData();
-            getMatches();
-            
+            getUnhostedMatches();
+            myMatchIDs = new List<int>();
+            myMatchTimes = new List<DateTime>();
+            myMatchTeam1Names = new List<string>();
+            myMatchTeam2Names = new List<string>();
         }
+        #endregion
 
-        private void getMatches()
+        private void getUnhostedMatches()
         {
             List<int> team1IDs;
             List<int> team2IDs;
@@ -57,5 +92,18 @@ namespace BussinessObject
             }
         }
 
+        public void getMyMatches(int refereeID)
+        {
+            List<int> team1IDs;
+            List<int> team2IDs;
+            myMatchTeam1Names = new List<string>();
+            myMatchTeam2Names = new List<string>();
+            accessData.GetMyMatches(refereeID, out myMatchIDs, out myMatchTimes, out team1IDs, out team2IDs);
+            for (int i = 0; i < team1IDs.Count; i++)
+            {
+                myMatchTeam1Names.Add(accessData.getTeamName(team1IDs[i]));
+                myMatchTeam2Names.Add(accessData.getTeamName(team2IDs[i]));
+            }
+        }
     }
 }

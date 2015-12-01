@@ -17,12 +17,11 @@
             Scheduler scheduler = new Scheduler();
             GetUserType getType = new GetUserType();
             DateTime start = DateTime.Now;
-            string userID = (string)Session["UserType"];
+            string userType = (string)Session["UserType"];
             //scheduler.autoReschedule(start);
-            if (userID != "")
+            if (userType != "")
             {
-                getType.setUserID(userID);
-                if (getType.isUserSuper())
+                if (getType.isUserSuper(userType))
                 {
                     <button class="btn waves-effect waves-light" type="submit" onclick="@{
                         //Session["EditSchedule"] = true;

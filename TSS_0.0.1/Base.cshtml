@@ -21,11 +21,21 @@
     <link rel="stylesheet" href="css/style.css">
 
     <title>Team Scheduling System</title>
+    <script type="text/javascript">
+        function submitForm(){
+            document.logout.submit();
+        }
+    </script>
 </head>
 
 <body>
     <script>
-        var pressedLogout = false;
+        @{ 
+            if (IsPost)
+            {
+                Session.Clear();
+            }
+        }
     </script>
     <div class="navbar-fixed">
         <nav>
@@ -38,7 +48,9 @@
                     @{
                         if (Session["UserID"] != null)//Loged in
                         {
-                            <li><a href="~/index.cshtml" onclick="pressedLogout=false">Logout</a></li>
+                               <form name="logout" method="post" action="~/index.cshtml" >
+                                   <li><a href="javascript: submitForm()">Logout</a></li>
+                               </form>
                         }
                         else
                         {
@@ -86,8 +98,8 @@
         @{
             if (Session["UserID"] != null)
             {
-                <p>session user id: @Session["UserID"]</p>
-                        <p>session user type: @Session["UserType"]</p>
+                <p>DEBUG: session user id: @Session["UserID"]</p>
+                <p>DEBUG: session user type: @Session["UserType"]</p>
             }
         }
     </div>
@@ -98,14 +110,6 @@
             closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
         });
     </script>
-    <script type="text/javascript">
-        function logout() {
-            @{
-                //Session.Clear();
-            }
-        }
-    </script>
-
 </body>
 
 </html>

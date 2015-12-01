@@ -1,4 +1,5 @@
 @using BussinessObject;
+@using System.Diagnostics;
 <html>
 
 <head>
@@ -14,19 +15,39 @@
             //Validation.RequireField("password", "Please enter a Password");
 
             AccountReferee referee = new AccountReferee();
+            GetUserType userType = new GetUserType();
+
+            if (Session["UserID"] != null)
+            {
+                if (userType.isUserReferee((string)Session["UserType"]))
+                {
+                    referee.getMyMatches((int)Session["UserID"]);
+                }
+                else
+                {
+                    //Debug.WriteLine("redirects at userType.isUserReferee: "+ (string)Session["UserType"]);
+                    Response.Redirect("~/index.cshtml");
+                }
+            }
+            else
+            {
+                //Debug.WriteLine("redirects at Session[UserID] equals null");
+                Response.Redirect("~/index.cshtml");
+            }
+
             /*
-                        if (IsPost)
-                        {
-                            string inputUsername = Request.Form["user_name"];
-                            string inputPassword = Request.Form["password"];
-                            if (Validation.IsValid())
-                            {
-                                Login login = new Login(inputUsername, inputPassword);
+            if (IsPost)
+            {
+                string inputUsername = Request.Form["user_name"];
+                string inputPassword = Request.Form["password"];
+                if (Validation.IsValid())
+                {
+                    Login login = new Login(inputUsername, inputPassword);
 
-                                string error;
+                    string error;
 
-                                if (login.Validate(out error))
-                                {
+                    if (login.Validate(out error))
+                    {
                         //Successful login code here
                         <p class="red lighten-2">
                             username: @inputUsername <br />

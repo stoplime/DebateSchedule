@@ -22,36 +22,36 @@ namespace BussinessObject
             accessData.UserID = userID;
         }
         
-        public bool isUserSuper()
+        public bool isUserSuper(string userType)
         {
-            if (accessData.UserType == "SuperReferee")
+            if (userType == "SuperReferee")
             {
                 return true;
             }
             return false;
         }
 
-        public bool isUserReferee()
+        public bool isUserReferee(string userType)
         {
-            if (accessData.UserType == "Referee")
+            if (userType == "Referee")
             {
                 return true;
             }
             return false;
         }
 
-        public bool isUserSchoolRep()
+        public bool isUserSchoolRep(string userType)
         {
-            if (accessData.UserType == "SchoolRep")
+            if (userType == "SchoolRep")
             {
                 return true;
             }
             return false;
         }
         
-        public bool isUserTeamMember()
+        public bool isUserTeamMember(string userType)
         {
-            if (accessData.UserType == "TeamMember")
+            if (userType == "TeamMember")
             {
                 return true;
             }
