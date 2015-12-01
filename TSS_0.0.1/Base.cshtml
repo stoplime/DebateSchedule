@@ -33,7 +33,10 @@
         @{ 
             if (IsPost)
             {
-                Session.Clear();
+                if (Request.Form["logout"] == "logout")
+                {
+                    Session.Clear();
+                }
             }
         }
     </script>
@@ -49,6 +52,7 @@
                         if (Session["UserID"] != null)//Loged in
                         {
                                <form name="logout" method="post" action="~/index.cshtml" >
+                                   <input name="logout" value="logout" hidden="hidden" />
                                    <li><a href="javascript: submitForm()">Logout</a></li>
                                </form>
                         }

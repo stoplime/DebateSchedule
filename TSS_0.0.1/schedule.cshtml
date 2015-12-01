@@ -10,33 +10,104 @@
 
 <body>
     <!-- Content -->
-    <div class="container">
-        <h4>Match Schedule</h4>
-        @{
-            Session["EditSchedule"] = false;
-            Scheduler scheduler = new Scheduler();
-            GetUserType getType = new GetUserType();
-            DateTime start = DateTime.Now;
-            string userType = (string)Session["UserType"];
-            //scheduler.autoReschedule(start);
-            if (userType != "")
+    @{
+        Scheduler scheduler = new Scheduler();
+        GetUserType getType = new GetUserType();
+        DateTime start = DateTime.Now;
+        string userType = (string)Session["UserType"];
+
+        if (IsPost)
+        {
+            if (Request.Form["edit"] == "edit")
             {
-                if (getType.isUserSuper(userType))
+                Session["EditSchedule"] = true;
+            }
+            if (Request.Form["cancel"] == "cancel")
+            {
+                Session["EditSchedule"] = false;
+            }
+            if (Request.Form["reschedule"] == "reschedule")
+            {
+                if (DateTime.TryParse(Request.Form["startDate"], out start))
                 {
-                    <button class="btn waves-effect waves-light" type="submit" onclick="@{
-                        //Session["EditSchedule"] = true;
-                        } ">Edit<i class="material-icons prefix">mode_edit</i></button>
+                    scheduler.autoReschedule(start);
+                    Session["EditSchedule"] = false;
                 }
+                else
+                {
+                    <p class="red lighten-2">
+                        Error: Starting date cannot be understood
+                    </p>
+                }
+            }
+            if (Request.Form["addRow"] == "addRow")
+            {
+                //Response.Redirect("~/UpdateSchedule.cshtml");
+            }
+            Response.Redirect("~/schedule.cshtml", false);
         }
 
+        if (userType != "")
+        {
+            if (getType.isUserSuper(userType))
+            {
+                if (Session["EditSchedule"] != null)
+                {
+                    if ((bool)Session["EditSchedule"] == false)
+                    {
+                        <div class="container">
+                            <form method="post">
+                                <button class="btn waves-effect waves-light" type="submit" name="edit" value="edit">
+                                    Edit <i class="material-icons prefix">mode_edit</i>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container">
+                            <form method="post">
+                                <div class="row">
+                                    <div class="col s6 m4 l3">
+                                        <button class="btn waves-effect waves-light" type="submit" name="cancel" value="cancel">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m4 l3">
+                                        <input name="startDate" type="text">
+                                        <label for="startDate">Start Schedule Date</label>
+                                    </div>
+                                    <div class="col s6 m4 l3">
+                                        <button class="btn waves-effect waves-light" type="submit" name="reschedule" value="reschedule">
+                                            Reschedule
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m4 l3">
+                                        <button class="btn waves-effect waves-light" type="submit" name="addRow" value="addRow">
+                                            Add Row
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                }
+            }
         }
+
+    }
+    <div class="container">
+        <h4>Match Schedule</h4>
         <table id="schedule" class="bordered">
             <thead>
                 <tr>
                     @{
-                        if ((bool)Session["EditSchedule"])
+                        if (Session["EditSchedule"] != null)
                         {
-                            <th data-field="edit">&nbsp;</th>
+                            if ((bool)Session["EditSchedule"])
+                            {
+                                <th data-field="edit">&nbsp;</th>
+                            }
                         }
                     }
                     <th data-field="id">Match ID</th>
@@ -55,9 +126,12 @@
                         //int roundNum = i + 1;
                         <tr>
                             @{
-                                if ((bool)Session["EditSchedule"])
+                                if (Session["EditSchedule"] != null)
                                 {
-                                    <td><a href="@Href("~/UpdateSchedule", scheduler.MatchIDs[i])">Edit</a></td>
+                                    if ((bool)Session["EditSchedule"])
+                                    {
+                                        <td><a href="@Href("~/UpdateSchedule", scheduler.MatchIDs[i])" class="btn waves-effect waves-light">Edit</a></td>
+                                    }
                                 }
                             }
                             <td>@scheduler.MatchIDs[i]</td>
@@ -65,7 +139,7 @@
                             <td>@scheduler.MatchTeam1Names[i]</td>
                             <td>@scheduler.MatchTeam2Names[i]</td>
                         </tr>
-                    }
+                                }
                 }
 
             </tbody>

@@ -31,11 +31,20 @@
 
             if (IsPost && Validation.IsValid())
             {
-                MatchTime = Request["MatchTime"].AsDateTime();
-                Team1 = Request["Team1"];
-                Team2 = Request["Team2"];
-                accessData.UpdateMatch(int.Parse(MatchId), MatchTime, Team1, Team2);
-                Response.Redirect(@Href("~/schedule.cshtml"));
+                if (Request.Form["update"] == "update")
+                {
+                    /*
+                    MatchTime = Request["MatchTime"].AsDateTime();
+                    Team1 = Request["Team1"];
+                    Team2 = Request["Team2"];
+                    accessData.UpdateMatch(int.Parse(MatchId), MatchTime, Team1, Team2);
+                    */
+                    Response.Redirect("~/index.cshtml");
+                }
+                if (Request.Form["delete"] == "delete")
+                {
+                    accessData.DeleteMatch(int.Parse(MatchId));
+                }
             }
             else
             {
@@ -48,12 +57,10 @@
 
             GetUserType getType = new GetUserType();
             DateTime start = DateTime.Now;
-            string userID = Request.QueryString["user_id"];
 
-            if (userID != "")
+            if (Session["UserType"] != null)
             {
-                getType.setUserID(userID);
-                if (!getType.isUserSuper())
+                if (!getType.isUserSuper((string)Session["UserType"]))
                 {
                     Response.Redirect("~/schedule.cshtml");
                 }
@@ -92,7 +99,7 @@
                     </div>
                     <div class="input-field col s12 m12 l4">
                         <select name="Team2">
-                            <option value="0" disabled>Select a Team</option>W
+                            <option value="0" disabled>Select a Team</option>
                             @{
                                 List<string> team2s;
                                 List<int> team2IDs;
@@ -121,16 +128,17 @@
                         <button class="btn waves-effect waves-light" type="submit" name="update">Update</button>
                     </div>
                     <div class="col s6 m4 l4">
-                        <button class="btn waves-effect waves-light" onclick="deleteMatch()" name="delete">Delete</button>
+                        <button class="btn waves-effect waves-light" type="submit" name="delete">Delete</button>
                     </div>
                 </div>
             </fieldset>
         </form>
-       <script type="text/javascript">
-           function deleteMatch() {
-               @accessData.DeleteMatch(int.Parse(MatchId));
-           }
-       </script>
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+        </script>
+               
     </div>
 
 </body>

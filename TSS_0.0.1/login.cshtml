@@ -33,6 +33,7 @@
                         type = login.GetUserType(userID);
                         Session["UserID"] = userID;
                         Session["UserType"] = type;
+                        Session["EditSchedule"] = false;
                         Response.Redirect("~/index.cshtml", false);
 
                         //displays login information
