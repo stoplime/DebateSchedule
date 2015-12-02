@@ -1,0 +1,86 @@
+﻿@using BussinessObject;
+@using DataAccess;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Load Base -->
+    @RenderPage("Base.cshtml")
+</head>
+<body>
+    <!-- Content -->
+    <div class="container">
+        <h4>Update Schedule</h4>
+        @{
+            Validation.RequireField("Team1Score", "Team1 score is required.");
+            Validation.Add("Team1Score", Validator.Integer("Score must be an integer"));
+            Validation.RequireField("Team2Score", "Team2 score is required.");
+            Validation.Add("Team2Score", Validator.Integer("Score must be an integer"));
+
+            int Team1Score = 0;
+            int Team2Score = 0;
+
+            string MatchId = UrlData[0];
+            string team1Name = UrlData[1];
+            string team2Name = UrlData[2];
+            if (MatchId.IsEmpty())
+            {
+                Response.Redirect("~/accountReferee.cshtml");
+            }
+            GetUserType type = new GetUserType();
+            if (Session["UserType"] != null)
+            {
+                if (!type.isUserReferee((string)Session["UserType"]))
+                {
+                    Response.Redirect("~/index.cshtml");
+                }
+            }
+            else
+            {
+                Response.Redirect("~/index.cshtml");
+            }
+
+            AccountRefereeData refereeData = new AccountRefereeData();
+
+            if (IsPost && Validation.IsValid())
+            {
+
+                if (Request.Form["EnterScore"] == "EnterScore")
+                {
+                    Team1Score = int.Parse(Request.Form["Team1Score"]);
+                    Team2Score = int.Parse(Request.Form["Team2Score"]);
+
+                    refereeData.setScores(int.Parse(MatchId), Team1Score, Team2Score, team1Name, team2Name);
+                    Response.Redirect("~/index.cshtml");
+                }
+            }
+
+        }
+        <form class="col s12" method="post" action="">
+            <fieldset>
+                <div class="row">
+                    <div class="input-field col s12 m6 l4">
+                        <input name="Team1Score" type="text">
+                        <label for="Team1Score">@team1Name</label>
+                        <p class="red-text lighten-2">@Html.ValidationMessage("Team1Score")</p>
+                    </div>
+                    <div class="input-field col s12 m12 l4">
+                        <input name="Team2Score" type="text">
+                        <label for="Team2Score">@team2Name</label>
+                        <p class="red-text lighten-2">@Html.ValidationMessage("Team2Score")</p>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col s6 m4 l4">
+                        <a href="~/accountReferee.cshtml" class="btn waves-effect waves-light">Cancel</a>
+                    </div>
+                    <div class="col s6 m4 l4">
+                        <button class="btn waves-effect waves-light" type="submit" name="EnterScore" value="EnterScore">Enter Score</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+</body>
+</html>

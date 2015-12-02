@@ -14,6 +14,14 @@
             //Validation.RequireField("user_name", "Please enter a Username");
             //Validation.RequireField("password", "Please enter a Password");
 
+            /*
+            if (Session["editHosts"] == null)
+            {
+                Session["editHosts"] = false;
+            }
+            */
+            Session["editHosts"] = true;
+
             AccountReferee referee = new AccountReferee();
             GetUserType userType = new GetUserType();
 
@@ -35,61 +43,151 @@
                 Response.Redirect("~/index.cshtml");
             }
 
-            /*
+
             if (IsPost)
             {
-                string inputUsername = Request.Form["user_name"];
-                string inputPassword = Request.Form["password"];
-                if (Validation.IsValid())
+                if (Request.Form["cancel"] == "cancel")
                 {
-                    Login login = new Login(inputUsername, inputPassword);
-
-                    string error;
-
-                    if (login.Validate(out error))
-                    {
-                        //Successful login code here
-                        <p class="red lighten-2">
-                            username: @inputUsername <br />
-                            encriptPass: @login.EncriptPass <br />
-                        </p>
-                    }
-                    else
-                    {
-                        <p class="red lighten-2">
-                            *Error: Username and/or Password does not match with the system <br />
-                            @error
-                        </p>
-                    }
+                    Session["editHosts"] = false;
                 }
-            }*/
-        }
-        <h3>Referee Name</h3>
-        <div class="row">
-            <div class="col s10 offset-s1 blue lighten-5">
-                <table>
-                    @{
-                        for (int i = 0; i < referee.MatchIDs.Count; i++)
+
+                if (Request.Form["addMatch"] == "addMatch")
+                {
+                    Session["editHosts"] = true;
+                    Response.Redirect("~/index.cshtml");
+                }
+
+                if (Request.Form["submitHosting"] == "submitHosting")
+                {
+                    for (int i = 0; i < referee.MatchIDs.Count; i++)
+                    {
+                        string id = referee.MatchIDs[i].ToString();
+                        if (Request.Form[referee.MatchIDs[i].ToString()] != null && Request.Form[referee.MatchIDs[i].ToString()] == id)
                         {
-                            <tr>
-                                <td>
-                                    <h4>Match: @referee.MatchIDs[i]</h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Date & time: @referee.MatchTimes[i].ToString()</td>
-                            </tr>
-                            <tr>
-                                <td>Team 1: @referee.MatchTeam1Names[i]</td>
-                            </tr>
-                            <tr>
-                                <td>Team 2: @referee.MatchTeam2Names[i]</td>
-                            </tr>
+                            referee.setHosting((int)Session["UserID"], referee.MatchIDs[i]);
+                        }
+                        else
+                        {
+                            referee.removeHosting(referee.MatchIDs[i]);
                         }
                     }
-                </table>
-            </div>
-        </div>
+                    Session["editHosts"] = false;
+                    Response.Redirect("~/accountReferee.cshtml");
+                }
+            }
+        }
+        @{
+            bool editHosts;
+            if (Session["editHosts"] == null)
+            {
+                editHosts = false;
+            }
+            else
+            {
+                editHosts = (bool)Session["editHosts"];
+            }
+            if (editHosts)
+            {
+                <h3>List of all Matches</h3>
+                <form method="post">
+                    <button class="btn waves-effect waves-light" type="submit" name="cancel" value="cancel">Cancel</button>
+                </form>
+                <div class="row">
+                    <div class="col s12 blue lighten-5">
+                        <form method="post">
+                            <button class="btn waves-effect waves-light" type="submit" name="submitHosting" value="submitHosting">Submit Hosting</button>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th data-field="selecting">Host</th>
+                                        <th data-field="id">Match ID</th>
+                                        <th data-field="time">Time</th>
+                                        <th data-field="team1">Team1</th>
+                                        <th data-field="team2">Team2</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @{
+                                        for (int i = 0; i < referee.MatchIDs.Count; i++)
+                                        {
+                                            <tr>
+                                                @{
+                                                    if (referee.RefIDs[i] == (int)Session["UserID"])
+                                                    {
+                                                        <td>
+                                                            <input id="@referee.MatchIDs[i]" type="checkbox" name="@referee.MatchIDs[i]" value="@referee.MatchIDs[i]" checked="checked" />
+                                                            <label for="@referee.MatchIDs[i]"></label>
+                                                        </td>
+                                                    }
+                                                    else if (referee.RefIDs[i] > 0)
+                                                    {
+                                                        <td>
+                                                            <input id="@referee.MatchIDs[i]" type="checkbox" name="@referee.MatchIDs[i]" value="@referee.MatchIDs[i]" checked="checked" disabled="disabled" />
+                                                            <label for="@referee.MatchIDs[i]"></label>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <input id="@referee.MatchIDs[i]" type="checkbox" name="@referee.MatchIDs[i]" value="@referee.MatchIDs[i]" />
+                                                            <label for="@referee.MatchIDs[i]"></label>
+                                                        </td>
+                                                    }
+                                                }
+
+                                                <td>@referee.MatchIDs[i]</td>
+                                                <td>@referee.MatchTimes[i].ToString()</td>
+                                                <td>@referee.MatchTeam1Names[i]</td>
+                                                <td>@referee.MatchTeam2Names[i]</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h3>Current Matches You Host</h3>
+                <form>
+                    <button class="btn waves-effect waves-light" type="submit" name="addMatch" value="addMatch">Add Matches</button>
+                </form>
+                <div class="row">
+                    <div class="col s12 blue lighten-5">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-field="setScores">&nbsp;</th>
+                                    <th data-field="id">Match ID</th>
+                                    <th data-field="time">Time</th>
+                                    <th data-field="team1">Team1</th>
+                                    <th data-field="team2">Team2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    for (int i = 0; i < referee.MyMatchIDs.Count; i++)
+                                    {
+                                        <tr>
+                                            <td><a href="@Href("~/UpdateScore", referee.MyMatchIDs[i],referee.MyMatchTeam1Names[i],referee.MyMatchTeam2Names[i])" class="btn waves-effect waves-light">Score</a></td>
+                                            <td>@referee.MyMatchIDs[i]</td>
+                                            <td>@referee.MyMatchTimes[i].ToString()</td>
+                                            <td>@referee.MyMatchTeam1Names[i]</td>
+                                            <td>@referee.MyMatchTeam2Names[i]</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                                    }
+        }
     </div>
 
 </body>

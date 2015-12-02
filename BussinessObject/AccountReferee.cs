@@ -11,11 +11,6 @@ namespace BussinessObject
     public class AccountReferee
     {
         private AccountRefereeData accessData;
-        private int refereeID;
-        public int RefereeID
-        {
-            set { refereeID = value; }
-        }
 
         // The unhosted matches
         private List<int> matchIDs;
@@ -40,6 +35,12 @@ namespace BussinessObject
         public List<string> MatchTeam2Names
         {
             get { return matchTeam2Names; }
+        }
+
+        private List<int> refIDs;
+        public List<int> RefIDs
+        {
+            get { return refIDs; }
         }
         // The matches that are considered the referee's hosting
         private List<int> myMatchIDs;
@@ -84,7 +85,7 @@ namespace BussinessObject
             List<int> team2IDs;
             matchTeam1Names = new List<string>();
             matchTeam2Names = new List<string>();
-            accessData.GetMatches(out matchIDs, out matchTimes, out team1IDs, out team2IDs);
+            accessData.GetMatches(out matchIDs, out matchTimes, out team1IDs, out team2IDs, out refIDs);
             for (int i = 0; i < team1IDs.Count; i++)
             {
                 matchTeam1Names.Add(accessData.getTeamName(team1IDs[i]));
@@ -104,6 +105,16 @@ namespace BussinessObject
                 myMatchTeam1Names.Add(accessData.getTeamName(team1IDs[i]));
                 myMatchTeam2Names.Add(accessData.getTeamName(team2IDs[i]));
             }
+        }
+
+        public void setHosting(int refereeID, int matchID)
+        {
+            accessData.AddHost(refereeID, matchID);
+        }
+
+        public void removeHosting(int matchID)
+        {
+            accessData.AddHost(0, matchID);
         }
     }
 }

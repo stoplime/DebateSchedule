@@ -27,18 +27,34 @@
                 Response.Redirect("~/schedule.cshtml");
             }
 
+            GetUserType type = new GetUserType();
+            if (Session["UserType"] != null)
+            {
+                if (!type.isUserSuper((string)Session["UserType"]))
+                {
+                    Response.Redirect("~/index.cshtml");
+                }
+            }
+            else
+            {
+                Response.Redirect("~/index.cshtml");
+            }
+
             ScheduleData accessData = new ScheduleData();
 
             if (IsPost && Validation.IsValid())
             {
+
                 if (Request.Form["update"] == "update")
                 {
-                    /*
+
                     MatchTime = Request["MatchTime"].AsDateTime();
+                    int team1ID = int.Parse(Request["Team1"]);
+                    int team2ID = int.Parse(Request["Team2"]);
                     Team1 = Request["Team1"];
                     Team2 = Request["Team2"];
-                    accessData.UpdateMatch(int.Parse(MatchId), MatchTime, Team1, Team2);
-                    */
+                    accessData.UpdateMatch(int.Parse(MatchId), MatchTime, team1ID, team2ID);
+
                     Response.Redirect("~/index.cshtml");
                 }
                 if (Request.Form["delete"] == "delete")
@@ -55,23 +71,12 @@
                 Team2 = accessData.GetTeamName(Team2ID);
             }
 
-            GetUserType getType = new GetUserType();
-            DateTime start = DateTime.Now;
-
-            if (Session["UserType"] != null)
-            {
-                if (!getType.isUserSuper((string)Session["UserType"]))
-                {
-                    Response.Redirect("~/schedule.cshtml");
-                }
-            }
-
         }
         <form class="col s12" method="post" action="">
             <fieldset>
                 <div class="row">
                     <div class="input-field col s12 m6 l4">
-                        <input name="MatchTime" type="text" class="validate" value="@MatchTime">
+                        <input name="MatchTime" type="date" class="datepicker validate" value="@MatchTime">
                         <label for="MatchTime">Match Time</label>
                         <p class="red-text lighten-2">@Html.ValidationMessage("MatchTime")</p>
                     </div>
@@ -125,18 +130,22 @@
                         <a href="~/schedule.cshtml" class="btn waves-effect waves-light">Cancel</a>
                     </div>
                     <div class="col s6 m4 l4">
-                        <button class="btn waves-effect waves-light" type="submit" name="update">Update</button>
+                        <button class="btn waves-effect waves-light" type="submit" name="update" value="update">Update</button>
                     </div>
                     <div class="col s6 m4 l4">
-                        <button class="btn waves-effect waves-light" type="submit" name="delete">Delete</button>
+                        <button class="btn waves-effect waves-light" type="submit" name="delete" value="delete">Delete</button>
                     </div>
                 </div>
             </fieldset>
         </form>
         <script type="text/javascript">
-        $(document).ready(function () {
-            $('select').material_select();
-        });
+            $(document).ready(function () {
+                $('select').material_select();
+            });
+            $('.datepicker').pickadate({
+                selectMonths: true, // Creates a dropdown to control month
+                selectYears: 15 // Creates a dropdown of 15 years to control year
+            });
         </script>
                
     </div>

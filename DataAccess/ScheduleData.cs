@@ -191,15 +191,25 @@ namespace DataAccess
             dl.SqlConnection.Close();
         }
 
-        public bool UpdateMatch(int matchID, DateTime matchTime, string team1, string team2)
+        public bool UpdateMatch(int matchID, DateTime matchTime, int team1, int team2)
         {
             dl.SqlConnection.Open();
+            /*
             string getTeam1IDString = "SELECT team_id FROM Team WHERE team_name='" + team1 + "'";
             string getTeam2IDString = "SELECT team_id FROM Team WHERE team_name='" + team2 + "'";
             SqlCommand sqlcTeam1 = new SqlCommand(getTeam1IDString, dl.SqlConnection);
             SqlCommand sqlcTeam2 = new SqlCommand(getTeam2IDString, dl.SqlConnection);
-            int team1ID = (int)sqlcTeam1.ExecuteScalar();
-            int team2ID = (int)sqlcTeam2.ExecuteScalar();
+            int team1ID = 0;
+            if (sqlcTeam1.ExecuteScalar() != null)
+            {
+                team1ID = (int)sqlcTeam1.ExecuteScalar();
+            }
+            int team2ID = 0;
+            if (sqlcTeam2.ExecuteScalar() != null)
+            {
+                team2ID = (int)sqlcTeam2.ExecuteScalar();
+            }
+            */
             string updateMatchTable = "UPDATE Schedule SET sche_datetime=@sche_datetime, sche_team1=@sche_team1, sche_team2=@sche_team2 WHERE sche_id=@sche_id";
             SqlCommand sqlcUpdate = new SqlCommand(updateMatchTable, dl.SqlConnection);
             sqlcUpdate.Parameters.AddWithValue("sche_datetime", matchTime);
