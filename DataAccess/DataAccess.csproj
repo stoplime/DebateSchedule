@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="AccountMember.cs" />
     <Compile Include="AccountRefereeData.cs" />
+    <Compile Include="AccountSuperData.cs" />
     <Compile Include="CreateAccData.cs" />
     <Compile Include="DatabaseLayer.cs" />
     <Compile Include="GetUserTypeData.cs" />

@@ -67,6 +67,18 @@ namespace BussinessObject
             get { return myMatchTeam2Names; }
         }
 
+        private List<int> myMatchTeam1Score;
+        public List<int> MyMatchTeam1Score
+        {
+            get { return myMatchTeam1Score; }
+        }
+
+        private List<int> myMatchTeam2Score;
+        public List<int> MyMatchTeam2Score
+        {
+            get { return myMatchTeam2Score; }
+        }
+
         #region constructor
         public AccountReferee()
         {
@@ -99,7 +111,7 @@ namespace BussinessObject
             List<int> team2IDs;
             myMatchTeam1Names = new List<string>();
             myMatchTeam2Names = new List<string>();
-            accessData.GetMyMatches(refereeID, out myMatchIDs, out myMatchTimes, out team1IDs, out team2IDs);
+            accessData.GetMyMatches(refereeID, out myMatchIDs, out myMatchTimes, out team1IDs, out team2IDs, out myMatchTeam1Score, out myMatchTeam2Score);
             for (int i = 0; i < team1IDs.Count; i++)
             {
                 myMatchTeam1Names.Add(accessData.getTeamName(team1IDs[i]));

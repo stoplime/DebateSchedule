@@ -10,37 +10,40 @@
     <!-- Content -->
     <div class="container">
         @{
-//.RequireField("user_name", "Please enter a Username");
-//Validation.RequireField("password", "Please enter a Password");
-/*
-if (IsPost)
-{
-    string inputUsername = Request.Form["user_name"];
-    string inputPassword = Request.Form["password"];
-    if (Validation.IsValid())
-    {
-        Login login = new Login(inputUsername, inputPassword);
+            //.RequireField("user_name", "Please enter a Username");
+            Validation.RequireField("sendSuperInvitation", "Please select a referee");
 
-        string error;
+            AccountSuper superAccount = new AccountSuper();
+            GetUserType userType = new GetUserType();
 
-        if (login.Validate(out error))
-        {
-            //Successful login code here
-            <p class="red lighten-2">
-                username: @inputUsername <br />
-                encriptPass: @login.EncriptPass <br />
-            </p>
-        }
-        else
-        {
-            <p class="red lighten-2">
-                *Error: Username and/or Password does not match with the system <br />
-                @error
-            </p>
-        }
-    }
-}
-*/
+            if (Session["UserID"] != null)
+            {
+                if (userType.isUserSuper((string)Session["UserType"]))
+                {
+                    //verified correctly for user type
+                }
+                else
+                {
+                    //Debug.WriteLine("redirects at userType.isUserReferee: "+ (string)Session["UserType"]);
+                    Response.Redirect("~/index.cshtml");
+                }
+            }
+            else
+            {
+                //Debug.WriteLine("redirects at Session[UserID] equals null");
+                Response.Redirect("~/index.cshtml");
+            }
+
+            if (IsPost)
+            {
+                if (Request.Form["sendSuperInvitation"] == "sendSuperInvitation")
+                {
+                    if (Request.Form["sendSuperInvitation"] != null)
+                    {
+                        //send email to Request.Form["sendSuperInvitation"] (pers_id)
+                    }
+                }
+            }
         }
         <h3>Super Referee Name</h3>
         <div class="row">
@@ -50,16 +53,14 @@ if (IsPost)
                 <form class="col s12">
                     <div class="row">
                         <div class="input-field col s12 m12 l12">
-                            <select>
-                                <option value="" disabled selected>Select a Referee</option>
-                                @{ /*
-                                    for (int i = 0; i < length; i++)
+                            <select name="selectReferee">
+                                <option value="0" disabled selected>Select a Referee</option>
+                                @{
+                                    for (int i = 0; i < superAccount.RefereeList.Count; i++)
                                     {
-
-                                    }*/
+                                        <option value="@superAccount.RefereeList[i]">@superAccount.RefereeName[i]</option>
+                                    }
                                 }
-                                <option value="1">Mark Walberg</option>
-                                <option value="2">Andrew Jackson</option>
                             </select>
                             <label>Super Referee Invitation</label>
                         </div>
@@ -67,7 +68,7 @@ if (IsPost)
                     <div class="row">
                     <div class="col s12 offset-m7 offset-l8">
                         <div class="col">
-                            <button class="btn waves-effect waves-light" type="submit" name="action">Send Invitation</button>
+                            <button class="btn waves-effect waves-light" type="submit" name="sendSuperInvitation" value="sendSuperInvitation">Send Invitation</button>
                         </div>
                     </div>
 

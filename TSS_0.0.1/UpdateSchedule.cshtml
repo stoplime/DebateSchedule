@@ -20,6 +20,8 @@
             DateTime MatchTime = DateTime.MinValue;
             string Team1 = "";
             string Team2 = "";
+            int Team1ID = 0;
+            int Team2ID = 0;
 
             string MatchId = UrlData[0];
             if (MatchId.IsEmpty())
@@ -47,7 +49,6 @@
 
                 if (Request.Form["update"] == "update")
                 {
-
                     MatchTime = Request["MatchTime"].AsDateTime();
                     int team1ID = int.Parse(Request["Team1"]);
                     int team2ID = int.Parse(Request["Team2"]);
@@ -65,8 +66,6 @@
             }
             else
             {
-                int Team1ID;
-                int Team2ID;
                 accessData.GetScheduleData(int.Parse(MatchId), out MatchTime, out Team1ID, out Team2ID);
                 Team1 = accessData.GetTeamName(Team1ID);
                 Team2 = accessData.GetTeamName(Team2ID);
@@ -82,7 +81,7 @@
                         <p class="red-text lighten-2">@Html.ValidationMessage("MatchTime")</p>
                     </div>
                     <div class="input-field col s12 m6 l4">
-                        <select name="Team1">
+                        <select id="team1Select" name="Team1" onchange="checkValidity()">
                             <option value="0" disabled>Select a Team</option>
                             @{
                                 List<string> team1s;
@@ -92,11 +91,11 @@
                                 {
                                     if (team1s[i] == Team1)
                                     {
-                                        <option value="@team1IDs[i]" selected>@team1s[i]</option>
+                                        <option value="@team1IDs[i]" onload="addTeam(@team1IDs[i])" selected>@team1s[i]</option>
                                     }
                                     else
                                     {
-                                        <option value="@team1IDs[i]">@team1s[i]</option>
+                                        <option value="@team1IDs[i]" onload="addTeam(@team1IDs[i])" >@team1s[i]</option>
                                     }
                                 }
                             }
@@ -104,7 +103,7 @@
                         <p class="red-text lighten-2">@Html.ValidationMessage("Team1")</p>
                     </div>
                     <div class="input-field col s12 m12 l4">
-                        <select name="Team2">
+                        <select id="team2Select" name="Team2">
                             <option value="0" disabled>Select a Team</option>
                             @{
                                 List<string> team2s;
@@ -114,11 +113,13 @@
                                 {
                                     if (team2s[i] == Team2)
                                     {
-                                        <option value="@team2IDs[i]" selected>@team2s[i]</option>
+                                        <option value="@team2IDs[i]" id="2 @team2IDs[i]" selected>@team2s[i]</option>
                                     }
                                     else
                                     {
-                                        <option value="@team2IDs[i]">@team2s[i]</option>
+                                        <span id="2 @team2IDs[i]">
+                                            <option value="@team2IDs[i]">@team2s[i]</option>
+                                        </span>
                                     }
                                 }
                             }
@@ -139,6 +140,17 @@
                 </div>
             </fieldset>
         </form>
+        @{
+            List<int> teamsAtMatchTime;
+            accessData.getTeamsFromDate(MatchTime, out teamsAtMatchTime);
+            for (int i = 0; i < teamsAtMatchTime.Count; i++)
+            {
+                if (teamsAtMatchTime[i] != Team1ID && teamsAtMatchTime[i] != Team2ID)
+                {
+                    <span onload="addTeamAtMatch(teamsAtMatchTime[i])"></span>
+                }
+            }
+        }
         <script type="text/javascript">
             $(document).ready(function () {
                 $('select').material_select();
@@ -147,7 +159,56 @@
                 selectMonths: true, // Creates a dropdown to control month
                 selectYears: 15 // Creates a dropdown of 15 years to control year
             });
+
         </script>
+
+        <script type="text/javascript">
+
+            Array teamList = newArray[1];
+            function addTeam(int id){
+                Array temp= new Array[teamList.length + 1];
+                for(int i = 0; i < teamList.length; i++){
+                    temp[i] = teamList[i];
+                }
+                temp[teamList.length + 1] = id;
+
+                teamList = temp;
+            }
+
+            var Selected1 = document.getElementById("team1Select").value;
+            var Selected2 = document.getElementById("team2Select").value;
+
+            Array teamAtMatchTimeList = newArray[1];
+               
+           
+            
+            function addTeamAtMatch(int id){
+                Array temp= new Array[teamAtMatchTimeList.length + 1];
+                for(int i = 0; i < teamAtMatchTimeList.length; i++){
+                    temp[i] = teamAtMatchTimeList[i];
+                }
+                temp[teamAtMatchTimeList.length + 1] = id;
+
+                teamAtMatchTimeList = temp;
+            }
+
+            function checkValidity(){
+                //document.getElementById("2 " + Selected1).disabled = "false";
+                //document.getElementById(Selected2).disabled = "false";
+                
+                Selected1 = document.getElementById("team1Select").value;
+                Selected2 = document.getElementById("team2Select").value;
+                //document.getElementById("2 " + Selected1).disabled = "true";
+                //document.getElementById(Selected2).disabled = "true";
+
+                for(int i = 0; i > teamAtMatchTimeList.length ; i ++){
+                document.getElementById(teamAtMatchTimeList[i]).disabled = "true";
+                document.getElementById("2 " + teamAtMatchTimeList[i]).disabled = "true";
+                }
+            }
+
+        </script>
+        
                
     </div>
 

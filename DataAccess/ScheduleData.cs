@@ -264,6 +264,25 @@ namespace DataAccess
             dl.SqlConnection.Close();
             return true;
         }
+
+        public bool getTeamsFromDate(DateTime date, out List<int> participatingTeams)
+        {
+            dl.SqlConnection.Open();
+            string getTeamsString = "SELECT sche_team1, sche_team2 FROM Schedule WHERE sche_datetime='" + date+"'";
+            SqlCommand sqlc = new SqlCommand(getTeamsString, dl.SqlConnection);
+            SqlDataReader reader = sqlc.ExecuteReader();
+            participatingTeams = new List<int>();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    participatingTeams.Add(reader.GetInt32(0));
+                    participatingTeams.Add(reader.GetInt32(1));
+                }
+            }
+            dl.SqlConnection.Close();
+            return true;
+        }
         #endregion
     }
 }

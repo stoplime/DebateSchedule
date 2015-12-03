@@ -64,9 +64,9 @@
             }
             if (Request.Form["addRow"] == "addRow")
             {
-                schedulerData.addNewRow(DateTime.Now, 0, 0);
-                //Session["addRow"] = true;
-                //Response.Redirect("~/UpdateSchedule.cshtml");
+                //schedulerData.addNewRow(DateTime.Now, 0, 0);
+                Session["addRow"] = true;
+                Response.Redirect("~/UpdateSchedule.cshtml");
             }
             System.Diagnostics.Debug.WriteLine("~~~~~prevalid~~~~ ");
             System.Diagnostics.Debug.WriteLine("valid~~~~ ");

@@ -53,7 +53,7 @@ namespace DataAccess
             return true;
         }
 
-        public bool GetMyMatches(int refereeID, out List<int> matchIDs, out List<DateTime> dateTimes, out List<int> team1s, out List<int> team2s)
+        public bool GetMyMatches(int refereeID, out List<int> matchIDs, out List<DateTime> dateTimes, out List<int> team1s, out List<int> team2s, out List<int> team1Scores, out List<int> team2Scores)
         {
             dl.SqlConnection.Open();
             string getScheduleString = "SELECT * FROM Schedule WHERE sche_deleted IS NULL AND sche_refereeid='"+ refereeID + "'";
@@ -63,6 +63,8 @@ namespace DataAccess
             dateTimes = new List<DateTime>();
             team1s = new List<int>();
             team2s = new List<int>();
+            team1Scores = new List<int>();
+            team2Scores = new List<int>();
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -71,6 +73,22 @@ namespace DataAccess
                     dateTimes.Add(reader.GetDateTime(1));
                     team1s.Add(reader.GetInt32(2));
                     team2s.Add(reader.GetInt32(3));
+                    if (!reader.IsDBNull(4))
+                    {
+                        team1Scores.Add(reader.GetInt32(4));
+                    }
+                    else
+                    {
+                        team1Scores.Add(0);
+                    }
+                    if (!reader.IsDBNull(5))
+                    {
+                        team2Scores.Add(reader.GetInt32(5));
+                    }
+                    else
+                    {
+                        team2Scores.Add(0);
+                    }
                 }
             }
             dl.SqlConnection.Close();
