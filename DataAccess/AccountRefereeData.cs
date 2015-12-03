@@ -103,10 +103,18 @@ namespace DataAccess
             SqlCommand sqlc = new SqlCommand(getString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             int matches = 0;
-            if (!reader.IsDBNull(0))
+            if (reader.HasRows)
             {
-                matches = reader.GetInt32(0);
+                if (reader.Read())
+                {
+                    if (!reader.IsDBNull(0))
+                    {
+                        matches = reader.GetInt32(0);
+                    }
+                }
             }
+
+            reader.Close();
             return matches;
         }
 
@@ -116,10 +124,18 @@ namespace DataAccess
             SqlCommand sqlc = new SqlCommand(getString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             int wins = 0;
-            if (!reader.IsDBNull(0))
+            if (reader.HasRows)
             {
-                wins = reader.GetInt32(0);
+                if (reader.Read())
+                {
+                    if (!reader.IsDBNull(0))
+                    {
+                        wins = reader.GetInt32(0);
+                    }
+                }
             }
+
+            reader.Close();
             return wins;
         }
 
@@ -129,9 +145,9 @@ namespace DataAccess
             string setScoresString = "UPDATE Schedule SET sche_team1score='" + team1Score + "', sche_team2score='" + team2Score + "' WHERE sche_id='" + matchID + "'";
             SqlCommand sqlc = new SqlCommand(setScoresString, dl.SqlConnection);
             sqlc.ExecuteNonQuery();
-            string setScoresTeam1String = "UPDATE Team SET team_score='" + team1Score + "', team_wins='@teamWins1', team_matches='@teamMatches1' WHERE team_name='" + team1Name + "'";
+            string setScoresTeam1String = "UPDATE Team SET team_score='" + team1Score + "', team_wins=@teamWins1, team_matches=@teamMatches1 WHERE team_name='" + team1Name + "'";
             SqlCommand sqlcTeam1 = new SqlCommand(setScoresTeam1String, dl.SqlConnection);
-            string setScoresTeam2String = "UPDATE Team SET team_score='" + team2Score + "', team_wins='@teamWins2', team_matches='@teamMatches2' WHERE team_name='" + team2Name + "'";
+            string setScoresTeam2String = "UPDATE Team SET team_score='" + team2Score + "', team_wins=@teamWins2, team_matches=@teamMatches2 WHERE team_name='" + team2Name + "'";
             SqlCommand sqlcTeam2 = new SqlCommand(setScoresTeam2String, dl.SqlConnection);
             int matches1 = getNumMatches(team1Name);
             int matches2 = getNumMatches(team2Name);
@@ -139,16 +155,18 @@ namespace DataAccess
             int wins2 = getNumWins(team2Name);
             if (team1Score == team2Score)
             {
-                sqlcTeam1.Parameters.AddWithValue("teamWins1", ++wins1);
-                sqlcTeam2.Parameters.AddWithValue("teamWins2", ++wins2);
+                sqlcTeam1.Parameters.AddWithValue("teamWins1", (++wins1));
+                sqlcTeam2.Parameters.AddWithValue("teamWins2", (++wins2));
             }
             else if (team1Score > team2Score)
             {
-                sqlcTeam1.Parameters.AddWithValue("teamWins1", ++wins1);
+                sqlcTeam1.Parameters.AddWithValue("teamWins1", (++wins1));
+                sqlcTeam2.Parameters.AddWithValue("teamWins2", (wins2));
             }
             else
             {
-                sqlcTeam2.Parameters.AddWithValue("teamWins2", ++wins2);
+                sqlcTeam1.Parameters.AddWithValue("teamWins1", (wins1));
+                sqlcTeam2.Parameters.AddWithValue("teamWins2", (++wins2));
             }
             sqlcTeam1.Parameters.AddWithValue("teamMatches1", ++matches1);
             sqlcTeam2.Parameters.AddWithValue("teamMatches2", ++matches2);

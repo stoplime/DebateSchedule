@@ -55,11 +55,12 @@
                     Team2 = Request["Team2"];
                     accessData.UpdateMatch(int.Parse(MatchId), MatchTime, team1ID, team2ID);
 
-                    Response.Redirect("~/index.cshtml");
+                    Response.Redirect("~/schedule.cshtml");
                 }
                 if (Request.Form["delete"] == "delete")
                 {
                     accessData.DeleteMatch(int.Parse(MatchId));
+                    Response.Redirect("~/schedule.cshtml");
                 }
             }
             else

@@ -20,7 +20,7 @@
                 Session["editHosts"] = false;
             }
             */
-            Session["editHosts"] = true;
+            //Session["editHosts"] = true;
 
             AccountReferee referee = new AccountReferee();
             GetUserType userType = new GetUserType();
@@ -51,10 +51,10 @@
                     Session["editHosts"] = false;
                 }
 
-                if (Request.Form["addMatch"] == "addMatch")
+                if (Request.Form["addMatchButton"] == "addMatchButton")
                 {
                     Session["editHosts"] = true;
-                    Response.Redirect("~/index.cshtml");
+                    //Response.Redirect("~/accountReferee.cshtml");
                 }
 
                 if (Request.Form["submitHosting"] == "submitHosting")
@@ -153,8 +153,8 @@
             else
             {
                 <h3>Current Matches You Host</h3>
-                <form>
-                    <button class="btn waves-effect waves-light" type="submit" name="addMatch" value="addMatch">Add Matches</button>
+                <form method="post">
+                    <button class="btn waves-effect waves-light" type="submit" name="addMatchButton" value="addMatchButton">Add Matches</button>
                 </form>
                 <div class="row">
                     <div class="col s12 blue lighten-5">

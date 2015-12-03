@@ -51,7 +51,7 @@
                     Team2Score = int.Parse(Request.Form["Team2Score"]);
 
                     refereeData.setScores(int.Parse(MatchId), Team1Score, Team2Score, team1Name, team2Name);
-                    Response.Redirect("~/index.cshtml");
+                    Response.Redirect("~/UpdateScore.cshtml");
                 }
             }
 

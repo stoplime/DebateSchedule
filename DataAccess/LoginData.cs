@@ -44,7 +44,11 @@ namespace DataAccess
             dl.SqlConnection.Open();
             string getUsername = "SELECT users_id FROM Users WHERE users_login='" + userName + "'";
             SqlCommand sqlc = new SqlCommand(getUsername, dl.SqlConnection);
-            int names = (int)sqlc.ExecuteScalar();
+            int names = 0;
+            if (sqlc.ExecuteScalar() != null)
+            {
+                names = (int)sqlc.ExecuteScalar();
+            }
             if (names > 0)
             {
                 dl.SqlConnection.Close();
