@@ -13,6 +13,19 @@
     <div class="container">
         <h4>Update Schedule</h4>
         @{
+            GetUserType type = new GetUserType();
+            if (Session["UserType"] != null)
+            {
+                if (!type.isUserSuper((string)Session["UserType"]))
+                {
+                    Response.Redirect("~/index.cshtml");
+                }
+            }
+            else
+            {
+                Response.Redirect("~/index.cshtml");
+            }
+
             Validation.RequireField("MatchTime", "A match time is required.");
             Validation.RequireField("Team1", "Team1 is required.");
             Validation.RequireField("Team2", "Team2 is required.");
@@ -29,20 +42,9 @@
                 Response.Redirect("~/schedule.cshtml");
             }
 
-            GetUserType type = new GetUserType();
-            if (Session["UserType"] != null)
-            {
-                if (!type.isUserSuper((string)Session["UserType"]))
-                {
-                    Response.Redirect("~/index.cshtml");
-                }
-            }
-            else
-            {
-                Response.Redirect("~/index.cshtml");
-            }
-
             ScheduleData accessData = new ScheduleData();
+
+            List<int> teamsAtMatchTime = new List<int>();
 
             if (IsPost && Validation.IsValid())
             {
@@ -50,11 +52,23 @@
                 if (Request.Form["update"] == "update")
                 {
                     MatchTime = Request["MatchTime"].AsDateTime();
-                    int team1ID = int.Parse(Request["Team1"]);
-                    int team2ID = int.Parse(Request["Team2"]);
-                    Team1 = Request["Team1"];
-                    Team2 = Request["Team2"];
-                    accessData.UpdateMatch(int.Parse(MatchId), MatchTime, team1ID, team2ID);
+                    Team1ID = int.Parse(Request["Team1"]);
+                    Team2ID = int.Parse(Request["Team2"]);
+                    accessData.getTeamsFromDate(MatchTime, out teamsAtMatchTime);
+                    for (int i = 0; i < teamsAtMatchTime.Count; i++)
+                    {
+                        if (Team1ID == teamsAtMatchTime[i])
+                        {
+                            Session["scheduleErrorMsgs"] = "Error: The selected team1 already has a match at this time";
+                            Response.Redirect(Href("~/UpdateSchedule", MatchId));
+                        }
+                        if (Team1ID == Team2ID)
+                        {
+                            Session["scheduleErrorMsgs"] = "Error: The selected team1 and team2 are the same";
+                            Response.Redirect(Href("~/UpdateSchedule", MatchId));
+                        }
+                    }
+                    accessData.UpdateMatch(int.Parse(MatchId), MatchTime, Team1ID, Team2ID);
 
                     Response.Redirect("~/schedule.cshtml");
                 }
@@ -70,7 +84,15 @@
                 Team1 = accessData.GetTeamName(Team1ID);
                 Team2 = accessData.GetTeamName(Team2ID);
             }
+            accessData.getTeamsFromDate(MatchTime, out teamsAtMatchTime);
 
+            if (Session["scheduleErrorMsgs"] != null)
+            {
+                <p class="red lighten-2">
+                    @Session["scheduleErrorMsgs"]
+                </p>
+                Session["scheduleErrorMsgs"] = null;
+            }
         }
         <form class="col s12" method="post" action="">
             <fieldset>
@@ -91,11 +113,11 @@
                                 {
                                     if (team1s[i] == Team1)
                                     {
-                                        <option value="@team1IDs[i]" onload="addTeam(@team1IDs[i])" selected>@team1s[i]</option>
+                                        <option value="@team1IDs[i]" selected>@team1s[i]</option>
                                     }
                                     else
                                     {
-                                        <option value="@team1IDs[i]" onload="addTeam(@team1IDs[i])" >@team1s[i]</option>
+                                        <option value="@team1IDs[i]" >@team1s[i]</option>
                                     }
                                 }
                             }
@@ -113,13 +135,11 @@
                                 {
                                     if (team2s[i] == Team2)
                                     {
-                                        <option value="@team2IDs[i]" id="2 @team2IDs[i]" selected>@team2s[i]</option>
+                                        <option value="@team2IDs[i]" selected>@team2s[i]</option>
                                     }
                                     else
                                     {
-                                        <span id="2 @team2IDs[i]">
-                                            <option value="@team2IDs[i]">@team2s[i]</option>
-                                        </span>
+                                        <option value="@team2IDs[i]">@team2s[i]</option>
                                     }
                                 }
                             }
@@ -141,15 +161,8 @@
             </fieldset>
         </form>
         @{
-            List<int> teamsAtMatchTime;
-            accessData.getTeamsFromDate(MatchTime, out teamsAtMatchTime);
-            for (int i = 0; i < teamsAtMatchTime.Count; i++)
-            {
-                if (teamsAtMatchTime[i] != Team1ID && teamsAtMatchTime[i] != Team2ID)
-                {
-                    <span onload="addTeamAtMatch(teamsAtMatchTime[i])"></span>
-                }
-            }
+            
+            
         }
         <script type="text/javascript">
             $(document).ready(function () {
@@ -159,53 +172,6 @@
                 selectMonths: true, // Creates a dropdown to control month
                 selectYears: 15 // Creates a dropdown of 15 years to control year
             });
-
-        </script>
-
-        <script type="text/javascript">
-
-            Array teamList = newArray[1];
-            function addTeam(int id){
-                Array temp= new Array[teamList.length + 1];
-                for(int i = 0; i < teamList.length; i++){
-                    temp[i] = teamList[i];
-                }
-                temp[teamList.length + 1] = id;
-
-                teamList = temp;
-            }
-
-            var Selected1 = document.getElementById("team1Select").value;
-            var Selected2 = document.getElementById("team2Select").value;
-
-            Array teamAtMatchTimeList = newArray[1];
-               
-           
-            
-            function addTeamAtMatch(int id){
-                Array temp= new Array[teamAtMatchTimeList.length + 1];
-                for(int i = 0; i < teamAtMatchTimeList.length; i++){
-                    temp[i] = teamAtMatchTimeList[i];
-                }
-                temp[teamAtMatchTimeList.length + 1] = id;
-
-                teamAtMatchTimeList = temp;
-            }
-
-            function checkValidity(){
-                //document.getElementById("2 " + Selected1).disabled = "false";
-                //document.getElementById(Selected2).disabled = "false";
-                
-                Selected1 = document.getElementById("team1Select").value;
-                Selected2 = document.getElementById("team2Select").value;
-                //document.getElementById("2 " + Selected1).disabled = "true";
-                //document.getElementById(Selected2).disabled = "true";
-
-                for(int i = 0; i > teamAtMatchTimeList.length ; i ++){
-                document.getElementById(teamAtMatchTimeList[i]).disabled = "true";
-                document.getElementById("2 " + teamAtMatchTimeList[i]).disabled = "true";
-                }
-            }
 
         </script>
         

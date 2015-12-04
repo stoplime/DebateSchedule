@@ -109,6 +109,7 @@
     <Content Include="Admin.cshtml" />
     <Content Include="UpdateSchedule.cshtml" />
     <Content Include="UpdateScore.cshtml" />
+    <Content Include="AddTeam.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
