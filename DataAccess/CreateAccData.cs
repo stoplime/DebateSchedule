@@ -200,13 +200,6 @@ namespace DataAccess
             dl.SqlConnection.Close();
             return false;
         }
-
-        public bool validRefCode(string refCode)
-        {
-            //returns true if referee code is valid
-
-            return true;
-        }
         #endregion
 
         #region add new user

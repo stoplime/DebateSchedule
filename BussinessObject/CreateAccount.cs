@@ -107,6 +107,17 @@ namespace BussinessObject
             return dataCreateAcc.getUserType(userID);
         }
 
+        public bool decode(string token)
+        {
+            byte[] data = Convert.FromBase64String(token);
+            DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
+            if (when < DateTime.UtcNow.AddHours(-24))
+            {
+                // too old
+                return false;
+            }
+            return true;
+        }
 
         public bool Valitate(out string errorMsgs, out int userID)
         {
@@ -150,7 +161,7 @@ namespace BussinessObject
                     break;
                 case UserEnum.Referee:
                     //***Check if referee code is correct***
-                    if (!dataCreateAcc.validRefCode(refCode))//returns true if refCode exists
+                    if (decode(refCode))//returns true if refCode exists
                     {
                         //ERROR: refCode does not exist
                         errorMsgs += "The Referee code entered does not match with our system \n";
