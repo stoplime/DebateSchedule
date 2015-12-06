@@ -34,8 +34,8 @@ namespace BussinessObject
             get { return teamname; }
         }
         
-        private string score;
-        public string Score
+        private int score;
+        public int Score
         {
             get { return score; }
         }

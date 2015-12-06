@@ -54,7 +54,7 @@ namespace DataAccess
         public bool getRepresentative(int schoolRepID, out string myName, out string schoolName)
         {
             dl.SqlConnection.Open();
-            string getRepresentativeString = "SELECT pers_firstname, pers_lastname, pers_schoolid FROM Person WHERE pers_id='" + schoolRepID + "'";
+            string getRepresentativeString = "SELECT pers_firstname, pers_lastname, pers_schoolid FROM Person WHERE pers_usersid='" + schoolRepID + "'";
             SqlCommand sqlc = new SqlCommand(getRepresentativeString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             myName = "";
