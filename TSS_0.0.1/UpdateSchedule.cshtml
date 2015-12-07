@@ -25,7 +25,7 @@
             {
                 Response.Redirect("~/index.cshtml");
             }
-
+            
             Validation.RequireField("MatchTime", "A match time is required.");
             Validation.RequireField("Team1", "Team1 is required.");
             Validation.RequireField("Team2", "Team2 is required.");
@@ -98,7 +98,7 @@
             <fieldset>
                 <div class="row">
                     <div class="input-field col s12 m6 l4">
-                        <input name="MatchTime" type="date" class="datepicker validate" value="@MatchTime">
+                        <input name="MatchTime" type="date" class="datepicker validate" data-value="@MatchTime.ToShortDateString()" >
                         <label for="MatchTime">Match Time</label>
                         <p class="red-text lighten-2">@Html.ValidationMessage("MatchTime")</p>
                     </div>
@@ -169,8 +169,12 @@
                 $('select').material_select();
             });
             $('.datepicker').pickadate({
-                selectMonths: true, // Creates a dropdown to control month
-                selectYears: 10, // Creates a dropdown of 15 years to control year
+                format: 'm/d/yyyy',
+                formatSubmit: 'mm/dd/yyyy',
+                selectMonths: true,
+                selectYears: true,
+                min: new Date(2005, 0, 1),
+                max: false
             });
 
         </script>
