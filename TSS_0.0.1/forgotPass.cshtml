@@ -10,28 +10,26 @@
     <!-- Content -->
     <div class="container">
         @{
-            Validation.RequireField("user_name", "Please enter an Email");
+            Validation.RequireField("email", "Please enter your Email");
+
+            ForgotPass forgotPass = new ForgotPass();
 
             if (IsPost)
             {
-                string inputUsername = Request.Form["user_name"];
                 if (Validation.IsValid())
                 {
-                    //instanciate a new forgot pass object
-
-                    //Validate username or email
-                    /*
-                    if (forgot_pass.Validate())
+                    forgotPass.Email = Request.Form["email"];
+                    string errorMsgs;
+                    if (!forgotPass.Validate(out errorMsgs))
                     {
-                        //Successful validation code here (AKA send Reset code here)
+                        <p class="red lighten-2">
+                            @errorMsgs
+                        </p>
                     }
                     else
                     {
-                        <p class="red lighten-2">
-                            *Error: Username or Email does not match with the system <br />
-                        </p>
+                        Response.Redirect("~/login.cshtml");
                     }
-                    */
                 }
             }
         }
@@ -44,9 +42,9 @@
 
             <div class="row">
                 <div class="input-field col s12">
-                    <input name="user_name" type="text" class="validate" value="@Request.Form["user_name"]">
-                    <label for="user_name">Username or Email</label>
-                    @Html.ValidationMessage("user_name")
+                    <input name="email" type="text" class="validate" value="@Request.Form["email"]">
+                    <label for="email">Enter your Email</label>
+                    @Html.ValidationMessage("email")
                 </div>
             </div>
             

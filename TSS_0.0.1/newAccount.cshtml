@@ -14,7 +14,9 @@
     <div class="container">
         @{
             Validation.RequireField("first_name", "Please enter a First Name");
+            Validation.Add("first_name", Validator.StringLength(50,0,"First Name is too long, max characters is 50"));
             Validation.RequireField("last_name", "Please enter a Last Name");
+            Validation.Add("last_name", Validator.StringLength(50, 0, "Last Name is too long, max characters is 50"));
             Validation.RequireField("user_name", "Please enter a Username");
             Validation.RequireField("password", "Please enter a Password");
             Validation.Add("password", Validator.StringLength(50, 8, "Minimum Password length is 8, max is 50"));

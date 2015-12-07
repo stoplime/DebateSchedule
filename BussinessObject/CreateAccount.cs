@@ -109,13 +109,29 @@ namespace BussinessObject
 
         public bool decode(string token)
         {
-            byte[] data = Convert.FromBase64String(token);
-            DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
-            if (when < DateTime.UtcNow.AddHours(-24))
+            int timeLimit = 24;
+            try
             {
-                // too old
+                Debug.WriteLine("pre get code");
+                byte[] data = Convert.FromBase64String(token);
+                Debug.WriteLine("Got code");
+                DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
+                Debug.WriteLine("Got Time: " + when);
+                Debug.WriteLine("Oldest Time: " + DateTime.UtcNow.AddHours(-1* timeLimit));
+                if (when < DateTime.UtcNow.AddHours(-1* timeLimit))
+                {
+                    // too old
+                    Debug.WriteLine("too old for ref code: " + when);
+                    Debug.WriteLine("needs to be older than: " + DateTime.UtcNow.AddHours(-1* timeLimit));
+                    return false;
+                }
+                Debug.WriteLine("Post check code");
+            }
+            catch (Exception)
+            {
                 return false;
             }
+            
             return true;
         }
 
@@ -161,7 +177,7 @@ namespace BussinessObject
                     break;
                 case UserEnum.Referee:
                     //***Check if referee code is correct***
-                    if (decode(refCode))//returns true if refCode exists
+                    if (!decode(refCode))//returns true if refCode exists
                     {
                         //ERROR: refCode does not exist
                         errorMsgs += "The Referee code entered does not match with our system \n";

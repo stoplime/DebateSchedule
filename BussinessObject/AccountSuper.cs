@@ -61,6 +61,7 @@ namespace BussinessObject
             accountData = new AccountSuperData();
             getReferees();
             getSupers();
+            
         }
 
         public void getReferees()
@@ -96,21 +97,6 @@ namespace BussinessObject
                     EnableSsl = true
                 };
                 client.Send(myEmail, toEmail, "TSS Referee Invitation", body);
-                /*
-                MailMessage mail = new MailMessage(myEmail, toEmail);
-                SmtpClient client = new SmtpClient()
-                {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    Credentials = new NetworkCredential("qv7p12r2@gmail.com", "tcb2fu38")
-                };
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = false;
-                mail.Subject = "TSS Referee Invitation";
-                mail.Body = "You have been invited to be a referee of the Team Scheduling System. You have 24 hours to accept this invitation. Use the code below when creating a new user by navigating to login and create new account. Make sure you choose the referee user type to enter in the referee code: " + generateCode();
-                client.Send(mail);
-                */
             }
             catch (SmtpException e)
             {
@@ -124,6 +110,22 @@ namespace BussinessObject
         {
             //update referee here
             accountData.updateRefereeToSuper(refereeID);
+
+            try
+            {
+                string body = "You have been invited to be a super referee of the Team Scheduling System. Your account has been automatically updated to a Super Referee account";
+                var client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("qv7p12r2@gmail.com", "tcb2fu38"),
+                    EnableSsl = true
+                };
+                client.Send(myEmail, accountData.GetEmailFromPersID(refereeID), "TSS Super Referee Invitation", body);
+            }
+            catch (SmtpException e)
+            {
+                Debug.WriteLine(e);
+            }
+            /*
             MailMessage mail = new MailMessage(myEmail, accountData.GetEmailFromPersID(refereeID));
             SmtpClient client = new SmtpClient();
             client.Port = 25;
@@ -133,6 +135,7 @@ namespace BussinessObject
             mail.Subject = "TSS Super Referee Invitation";
             mail.Body = "You have been invited to be a super referee of the Team Scheduling System. Your account has been automatically updated to a Super Referee account";
             client.Send(mail);
+            */
             return true;
         }
     }

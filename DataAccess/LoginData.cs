@@ -74,6 +74,16 @@ namespace DataAccess
             return false;
         }
 
+        public bool resetPass(string email, string pass)
+        {
+            dl.SqlConnection.Open();
+            string resetPassString = "UPDATE Users SET users_password='" + pass + "' WHERE users_email='" + email + "'";
+            SqlCommand sqlc = new SqlCommand(resetPassString, dl.SqlConnection);
+            sqlc.ExecuteNonQuery();
+            dl.SqlConnection.Close();
+            return true;
+        }
+
         public bool validPass(string username, string pass, bool isEmail, out int userID)
         {
             userID = -1;
