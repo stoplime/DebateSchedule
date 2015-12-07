@@ -46,6 +46,7 @@
     <Compile Include="AccountSchoolRep.cs" />
     <Compile Include="AccountSuper.cs" />
     <Compile Include="CreateAccount.cs" />
+    <Compile Include="EditProfile.cs" />
     <Compile Include="ForgotPass.cs" />
     <Compile Include="GetUserType.cs" />
     <Compile Include="Login.cs" />

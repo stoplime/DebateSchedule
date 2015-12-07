@@ -48,6 +48,7 @@
     <Compile Include="AccountSuperData.cs" />
     <Compile Include="CreateAccData.cs" />
     <Compile Include="DatabaseLayer.cs" />
+    <Compile Include="EditProfileData.cs" />
     <Compile Include="GetUserTypeData.cs" />
     <Compile Include="LoginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

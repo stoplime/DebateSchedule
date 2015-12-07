@@ -3,10 +3,10 @@ C:\Users\Steffen\Documents\GitHub\DebateSchedule\BussinessObject\bin\Debug\Bussi
 C:\Users\Steffen\Documents\GitHub\DebateSchedule\BussinessObject\obj\Debug\BussinessObject.csprojResolveAssemblyReference.cache
 C:\Users\Steffen\Documents\GitHub\DebateSchedule\BussinessObject\obj\Debug\BussinessObject.dll
 C:\Users\Steffen\Documents\GitHub\DebateSchedule\BussinessObject\obj\Debug\BussinessObject.pdb
+C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\obj\Debug\BussinessObject.csprojResolveAssemblyReference.cache
 C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\bin\Debug\BussinessObject.dll
 C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\bin\Debug\BussinessObject.pdb
-C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\obj\Debug\BussinessObject.csprojResolveAssemblyReference.cache
-C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\obj\Debug\BussinessObject.dll
-C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\obj\Debug\BussinessObject.pdb
 C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\bin\Debug\DataAccess.dll
 C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\bin\Debug\DataAccess.pdb
+C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\obj\Debug\BussinessObject.dll
+C:\Users\workstation\Documents\My Web Sites\Github\BussinessObject\obj\Debug\BussinessObject.pdb

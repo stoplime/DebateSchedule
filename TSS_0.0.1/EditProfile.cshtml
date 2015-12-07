@@ -1,0 +1,128 @@
+﻿@using BussinessObject;
+<html>
+<head>
+    <!-- Load Base -->
+    @RenderPage("Base.cshtml")
+</head>
+<body>
+    <div class="container">
+        @{
+            Validation.RequireField("first_name", "Please enter a First Name");
+            Validation.Add("first_name", Validator.StringLength(50, 0, "First Name is too long, max characters is 50"));
+            Validation.RequireField("last_name", "Please enter a Last Name");
+            Validation.Add("last_name", Validator.StringLength(50, 0, "Last Name is too long, max characters is 50"));
+            Validation.RequireField("user_name", "Please enter a Username");
+            Validation.RequireField("password", "Please enter a Password");
+            Validation.Add("password", Validator.StringLength(50, 8, "Minimum Password length is 8, max is 50"));
+            Validation.RequireField("password2", "Please confirm your Password");
+            Validation.Add("password2", Validator.EqualsTo("password", "Password does not match"));
+            Validation.RequireField("email", "Please enter an Email");
+
+            EditProfile editProfile = new EditProfile();
+
+            if (Session["UserID"] != null)
+            {
+
+            }
+            else
+            {
+                //Debug.WriteLine("redirects at Session[UserID] equals null");
+                Response.Redirect("~/index.cshtml");
+            }
+
+            <form method="post">
+                <div class="row">
+                    <div class="col s12">
+
+                    </div>
+
+                </div>
+            </form>
+
+            if (Session["editProfile"] == null)
+            {
+                Session["editProfile"] = false;
+            }
+            else
+            {
+                if ((bool)Session["editProfile"] == true)
+                {
+                    <form method="post">
+                        <h3>Edit Profile</h3>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l4">
+                                <input name="first_name" type="text" class="validate" value="@editProfile.FirstName">
+                                <label for="first_name">First Name</label>
+                                <p class="red-text lighten-2">@Html.ValidationMessage("first_name")</p>
+                            </div>
+                            <div class="input-field col s12 m6 l4">
+                                <input name="last_name" type="text" class="validate" value="@editProfile.LastName">
+                                <label for="last_name">Last Name</label>
+                                <p class="red-text lighten-2">@Html.ValidationMessage("last_name")</p>
+                            </div>
+                            <div class="input-field col s12 m12 l4">
+                                <input name="user_name" type="text" class="validate" value="@editProfile.Username">
+                                <label for="user_name">Username</label>
+                                <p class="red-text lighten-2">@Html.ValidationMessage("user_name")</p>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <input name="password" placeholder="minimum 8 char" type="password" class="validate">
+                                <label for="password">Password</label>
+                                <p class="red-text lighten-2">@Html.ValidationMessage("password")</p>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <input name="password2" type="password" class="validate">
+                                <label for="password2">Confirm Password</label>
+                                <p class="red-text lighten-2">@Html.ValidationMessage("password2")</p>
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                <input name="email" type="email" class="validate" value="@editProfile.Email">
+                                <label class="col s6" for="email" data-error="please enter a valid email">Email</label>
+                                <p class="red-text lighten-2">@Html.ValidationMessage("email")</p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col offset-s4 offset-m8 offset-l10">
+                                <button class="btn waves-effect waves-light" type="submit" name="action">Edit</button>
+                            </div>
+                        </div>
+                    </form>
+                }
+                else
+                {
+
+                    <h3>Profile</h3>
+                    <h3>@editProfile.Username</h3>
+                    <div class="row">
+                        <div class="col s12 blue lighten-5">
+                            <table>
+                                <tr>
+                                    <td>Contact Email: @editProfile.Email</td>
+                                </tr>
+                                <tr>
+                                    <td>School: @editProfile.FirstName</td>
+                                </tr>
+                                <tr>
+                                    <td>Team: @editProfile.LastName</td>
+                                </tr>
+                                <tr>
+                                    <td>Type: member</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <form method="post">
+                        <div class="row ">
+                            <div class="col offset-s4 offset-m8 offset-l10">
+                                <button class="btn waves-effect waves-light" type="submit" name="action">Edit Profile</button>
+                            </div>
+                        </div>
+                    </form>
+
+                }
+            }
+        }
+
+    </div>
+</body>
+</html>

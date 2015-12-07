@@ -70,6 +70,7 @@ C:\Users\Steffen\Documents\GitHub\DebateSchedule\TSS_0.0.1\bin\BussinessObject.d
 C:\Users\Steffen\Documents\GitHub\DebateSchedule\TSS_0.0.1\bin\DataAccess.dll
 C:\Users\Steffen\Documents\GitHub\DebateSchedule\TSS_0.0.1\bin\BussinessObject.pdb
 C:\Users\Steffen\Documents\GitHub\DebateSchedule\TSS_0.0.1\bin\DataAccess.pdb
+C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\obj\Debug\TSS_0.0.1.csprojResolveAssemblyReference.cache
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\bin\roslyn\csc.exe
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
@@ -104,6 +105,5 @@ C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\bin\System.Web.Razo
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\bin\System.Web.WebPages.xml
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\bin\System.Web.WebPages.Deployment.xml
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\bin\System.Web.WebPages.Razor.xml
-C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\obj\Debug\TSS_0.0.1.csprojResolveAssemblyReference.cache
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\obj\Debug\TSS_0.0.1.dll
 C:\Users\workstation\Documents\My Web Sites\Github\TSS_0.0.1\obj\Debug\TSS_0.0.1.pdb
