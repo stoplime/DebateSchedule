@@ -12,6 +12,7 @@
         @{
             //.RequireField("user_name", "Please enter a Username");
             Validation.RequireField("sendSuperInvitation", "Please select a referee");
+            Validation.RequireField("email", "Please enteran email to send a referee code to");
 
             AccountSuper superAccount = new AccountSuper();
             GetUserType userType = new GetUserType();
@@ -39,19 +40,30 @@
             {
                 if (Request.Form["sendSuperInvitation"] == "sendSuperInvitation")
                 {
-                    if (Request.Form["selectReferee"] != null)
+                    string[] fields = new string[1];
+                    fields[0] = "sendSuperInvitation";
+                    if (Validation.IsValid(fields))
                     {
-                        //send email to Request.Form["selectReferee"] (pers_id)
-                        superAccount.sendSuperInvitation(int.Parse(Request.Form["selectReferee"]));
+                        if (Request.Form["selectReferee"] != null)
+                        {
+                            //send email to Request.Form["selectReferee"] (pers_id)
+                            superAccount.sendSuperInvitation(int.Parse(Request.Form["selectReferee"]));
+                        }
                     }
                 }
                 if (Request.Form["sendRefereeInvitation"] == "sendRefereeInvitation")
                 {
-                    superAccount.sendRefereeInvitation(Request.Form["email"]);
-                    Response.Redirect("~/accountSuperReferee.cshtml");
+                    string[] fields = new string[1];
+                    fields[0] = "email";
+                    if (Validation.IsValid(fields))
+                    {
+                        superAccount.sendRefereeInvitation(Request.Form["email"]);
+                        Response.Redirect("~/accountSuperReferee.cshtml");
+                    }
                 }
             }
         }
+        @RenderPage("~/EditProfile.cshtml")
         <div class="row">
 
             <div class="col s12 blue lighten-5">
@@ -82,8 +94,8 @@
                 <form class="col s12" method="post">
                     <div class="row">
                         <div class="input-field col s12 m12 l12">
-                            <input name="email" type="email" class="validate" value="@Request.Form["email"]">
-                            <label class="col s6" for="email" data-error="please enter a valid email">Invitation for Referee code</label>
+                            <input name="email" type="email" class="validate">
+                            <label class="col s6" for="email" data-error="please enter a valid email">Invitation Email for Referee code</label>
                             <p class="red-text lighten-2">@Html.ValidationMessage("email")</p>
                         </div>
                     </div>

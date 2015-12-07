@@ -9,9 +9,57 @@
 <body>
     <!-- Content -->
     <div class="container">
+        @{
+            if (Session["editScores"] == null)
+            {
+                Session["editScores"] = false;
+            }
+            Scores scores = new Scores();
+
+            GetUserType userType = new GetUserType();
+
+            if (Session["UserID"] != null)
+            {
+                if (userType.isUserSuper((string)Session["UserType"]))
+                {
+                    //verified correctly for user type
+                    if ((bool)Session["editScores"] == false)
+                    {
+                        <form method="post">
+                            <button class="btn waves-effect waves-light" type="submit" name="editScoresBtn" value="editScoresBtn">Edit Scores</button>
+                        </form>
+                    }
+                }
+            }
+            if (IsPost)
+            {
+                if (Request.Form["editScoresBtn"] == "editScoresBtn")
+                {
+                    Session["editScores"] = true;
+                    Response.Redirect("~/scores.cshtml");
+                }
+                if (Request.Form["cancel"] == "cancel")
+                {
+                    Session["editScores"] = false;
+                    Response.Redirect("~/scores.cshtml");
+                }
+            }
+            if ((bool)Session["editScores"] == true)
+            {
+                <form method="post">
+                    <button class="btn waves-effect waves-light" type="submit" name="cancel" value="cancel">Cancel</button>
+                </form>
+            }
+        }
         <table id="schedule" class="bordered">
             <thead>
                 <tr>
+                    @{
+                        if ((bool)Session["editScores"] == true)
+                        {
+                            <th data-field="edit">&nbsp;</th>
+                        }
+                    }
                     <th data-field="id">Match ID</th>
                     <th data-field="time">Time</th>
                     <th data-field="team1">Team1</th>
@@ -23,11 +71,15 @@
 
             <tbody>
                 @{
-                    Scores scores = new Scores();
-                    
                     for (int i = 0; i < scores.MatchIDs.Count; i++)
                     {
                         <tr>
+                            @{
+                                if ((bool)Session["editScores"] == true)
+                                {
+                                    <td><a href="@Href("~/UpdateScore", scores.MatchIDs[i], scores.Team1s[i], scores.Team2s[i])" class="btn waves-effect waves-light">Edit</a></td>
+                                }
+                            }
                             <td>@scores.MatchIDs[i]</td>
                             <td>@scores.DateTimes[i]</td>
                             <td>@scores.Team1s[i]</td>

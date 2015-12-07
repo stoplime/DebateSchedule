@@ -33,7 +33,7 @@ namespace BussinessObject
         private string lastName;
         public string LastName
         {
-            get { return LastName; }
+            get { return lastName; }
         }
 
         public EditProfile()
@@ -43,8 +43,12 @@ namespace BussinessObject
 
         public bool GetData(int userID)
         {
-            accessData.GetData(userID, out username, out email, out firstName, out lastName);
-            return true;
+            return accessData.GetData(userID, out username, out email, out firstName, out lastName);
+        }
+
+        public bool UpdateProfile(int userID, string firstName, string lastName, string username, string email, string password)
+        {
+            return accessData.UpdateProfile(userID, firstName, lastName, username, email, password);
         }
     }
 }

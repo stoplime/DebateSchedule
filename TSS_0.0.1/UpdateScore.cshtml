@@ -25,12 +25,12 @@
             string team2Name = UrlData[2];
             if (MatchId.IsEmpty())
             {
-                Response.Redirect("~/accountReferee.cshtml");
+                Response.Redirect("~/scores.cshtml");
             }
             GetUserType type = new GetUserType();
             if (Session["UserType"] != null)
             {
-                if (!type.isUserReferee((string)Session["UserType"]))
+                if (!type.isUserReferee((string)Session["UserType"]) && !type.isUserSuper((string)Session["UserType"]))
                 {
                     Response.Redirect("~/index.cshtml");
                 }

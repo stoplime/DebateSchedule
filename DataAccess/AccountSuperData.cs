@@ -80,7 +80,7 @@ namespace DataAccess
         public bool updateRefereeToSuper(int refereeID)
         {
             dl.SqlConnection.Open();
-            string updateRefString = "UPDATE Person SET pers_type=SuperReferee WHERE pers_id='" + refereeID + "'";
+            string updateRefString = "UPDATE Person SET pers_type='SuperReferee' WHERE pers_id='" + refereeID + "'";
             SqlCommand sqlc = new SqlCommand(updateRefString, dl.SqlConnection);
             sqlc.ExecuteNonQuery();
             dl.SqlConnection.Close();
