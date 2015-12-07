@@ -1,0 +1,35 @@
+@using BussinessObject;
+<html>
+<head>
+    <!-- Load Base -->
+</head>
+<body>
+    @{
+        Fotter footer = new Fotter();
+        footer.getSupers();
+    }
+    <footer class="page-footer">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">TSS</h5>
+                <p class="grey-text text-lighten-4"> If you have any issues while using our service, please feel free to contact any super referee by using the links on the right. </p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Super Referee Contacts</h5>
+                <ul>
+                    @{
+                        for(int i = 0; i < footer.Names.Count; i++){
+                            <li><a class="grey-text text-lighten-3" href="mailto:@footer.Emails[i]">@footer.Names[i]</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2015 Copyright TSS Team Squad
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

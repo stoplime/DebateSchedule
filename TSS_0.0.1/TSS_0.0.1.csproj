@@ -95,6 +95,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="footer.cshtml" />
     <Content Include="packages.config" />
     <Content Include="accountMember.cshtml" />
     <Content Include="accountReferee.cshtml" />
@@ -111,6 +112,7 @@
     <Content Include="UpdateScore.cshtml" />
     <Content Include="AddTeam.cshtml" />
     <Content Include="EditProfile.cshtml" />
+    <None Include="Properties\PublishProfiles\TSS_1.0.0.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

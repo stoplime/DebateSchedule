@@ -53,6 +53,7 @@
                         selectTeam = Request.Form["team"];
                         break;
                     case UserEnum.SchoolRep:
+                        Validation.RequireField("school_name", "Please enter a School to represent");
                         schoolInput = Request.Form["school_name"];
                         break;
                     case UserEnum.Referee:
@@ -107,6 +108,7 @@
         <form class="col s12" method="post">
             <div class="row">
                 <h2>Create New Account</h2>
+                <p class="red-text lighten-2">@Html.ValidationMessage("school_name")</p>
             </div>
             <div class="row">
                 <div class="input-field col s12 m6 l4">
@@ -238,7 +240,7 @@
             $('select').material_select();
         });
     </script>
-
+    @RenderPage("footer.cshtml")
 </body>
 
 </html>

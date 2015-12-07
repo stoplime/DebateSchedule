@@ -98,15 +98,7 @@
             </div>
         </nav>
     </div>
-    <div class="container">
-        @{
-            if (Session["UserID"] != null)
-            {
-                <p>DEBUG: session user id: @Session["UserID"]</p>
-                <p>DEBUG: session user type: @Session["UserType"]</p>
-            }
-        }
-    </div>
+    <br />
     <script>
         $('.button-collapse').sideNav({
             menuWidth: 300, // Default is 240

@@ -56,6 +56,14 @@ namespace DataAccess
             return true;
         }
 
+        public bool VerifyProfile(string username, string email)
+        {
+            dl.SqlConnection.Open();
+            
+            dl.SqlConnection.Close();
+            return true;
+        }
+
         public bool UpdateProfile(int userID, string firstName, string lastName, string username, string email, string password)
         {
             dl.SqlConnection.Open();
