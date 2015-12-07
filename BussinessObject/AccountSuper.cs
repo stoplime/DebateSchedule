@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using System.Net;
 using System.Diagnostics;
 
 using DataAccess;
@@ -59,6 +60,7 @@ namespace BussinessObject
         {
             accountData = new AccountSuperData();
             getReferees();
+            getSupers();
         }
 
         public void getReferees()
@@ -66,17 +68,14 @@ namespace BussinessObject
             accountData.getTypeList(out refereeList, out refereeName, out refereeEmail, "Referee");
         }
 
-        public void getSupers(int myID)
+        public void getSupers()
         {
             accountData.getTypeList(out superList, out superName, out superEmail, "SuperReferee");
-            for (int i = 0; i < superList.Count; i++)
-            {
-                if (superList[i] == myID)
-                {
-                    myEmail = superEmail[i];
-                    break;
-                }
-            }
+        }
+
+        public void getMyEmail(int myID)
+        {
+            myEmail = accountData.getMyEmail(myID);
         }
 
         public string generateCode()
@@ -88,15 +87,36 @@ namespace BussinessObject
 
         public bool sendRefereeInvitation(string toEmail)
         {
-            MailMessage mail = new MailMessage(myEmail, toEmail);
-            SmtpClient client = new SmtpClient();
-            client.Port = 25;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Host = "smtp.google.com";
-            mail.Subject = "TSS Referee Invitation";
-            mail.Body = "You have been invited to be a referee of the Team Scheduling System. You have 24 hours to accept this invitation. Use the code below when creating a new user by navigating to login and create new account. Make sure you choose the referee user type to enter in the referee code: " + generateCode();
-            client.Send(mail);
+            try
+            {
+                string body = "You have been invited to be a referee of the Team Scheduling System. You have 24 hours to accept this invitation. Use the code below when creating a new user by navigating to login and create new account. Make sure you choose the referee user type to enter in the referee code: " + generateCode();
+                var client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("qv7p12r2@gmail.com", "tcb2fu38"),
+                    EnableSsl = true
+                };
+                client.Send(myEmail, toEmail, "TSS Referee Invitation", body);
+                /*
+                MailMessage mail = new MailMessage(myEmail, toEmail);
+                SmtpClient client = new SmtpClient()
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential("qv7p12r2@gmail.com", "tcb2fu38")
+                };
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                mail.Subject = "TSS Referee Invitation";
+                mail.Body = "You have been invited to be a referee of the Team Scheduling System. You have 24 hours to accept this invitation. Use the code below when creating a new user by navigating to login and create new account. Make sure you choose the referee user type to enter in the referee code: " + generateCode();
+                client.Send(mail);
+                */
+            }
+            catch (SmtpException e)
+            {
+                Debug.WriteLine(e);
+            }
+            
             return true;
         }
 

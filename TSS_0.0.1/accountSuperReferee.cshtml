@@ -21,7 +21,7 @@
                 if (userType.isUserSuper((string)Session["UserType"]))
                 {
                     //verified correctly for user type
-                    superAccount.getSupers((int)Session["UserID"]);
+                    superAccount.getMyEmail((int)Session["UserID"]);
                 }
                 else
                 {
@@ -48,6 +48,7 @@
                 if (Request.Form["sendRefereeInvitation"] == "sendRefereeInvitation")
                 {
                     superAccount.sendRefereeInvitation(Request.Form["email"]);
+                    Response.Redirect("~/accountSuperReferee.cshtml");
                 }
             }
         }

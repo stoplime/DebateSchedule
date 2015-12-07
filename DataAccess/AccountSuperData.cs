@@ -126,5 +126,22 @@ namespace DataAccess
             return email;
         }
         
+        public string getMyEmail(int myID)
+        {
+            dl.SqlConnection.Open();
+            string getMyEmailString = "SELECT users_email FROM Users WHERE users_id='" + myID + "'";
+            SqlCommand sqlc = new SqlCommand(getMyEmailString, dl.SqlConnection);
+            SqlDataReader reader = sqlc.ExecuteReader();
+            string email = "";
+            if (reader.HasRows)
+            {
+                if (reader.Read())
+                {
+                    email = reader.GetString(0);
+                }
+            }
+            dl.SqlConnection.Close();
+            return email;
+        }
     }
 }
