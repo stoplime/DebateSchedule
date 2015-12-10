@@ -47,19 +47,17 @@ namespace BussinessObject
         public Scheduler()
         {
             accessToData = new ScheduleData();
-            numberOfRows = accessToData.GetScheduleRows(out matchIDs);
-            matchTimes = new List<DateTime>();
+
+            matchIDs = new List<int>();
             matchTeam1Names = new List<string>();
             matchTeam2Names = new List<string>();
-            for (int i = 0; i < numberOfRows; i++)
+            List<int> team1IdTemp;
+            List<int> team2IdTemp;
+            accessToData.GetScheduleData(out matchIDs, out matchTimes, out team1IdTemp, out team2IdTemp);
+            for (int i = 0; i < matchIDs.Count; i++)
             {
-                DateTime timeTemp;
-                int team1IdTemp;
-                int team2IdTemp;
-                accessToData.GetScheduleData(matchIDs[i], out timeTemp, out team1IdTemp, out team2IdTemp);
-                matchTimes.Add(timeTemp);
-                matchTeam1Names.Add(accessToData.GetTeamName(team1IdTemp));
-                matchTeam2Names.Add(accessToData.GetTeamName(team2IdTemp));
+                matchTeam1Names.Add(accessToData.GetTeamName(team1IdTemp[i]));
+                matchTeam2Names.Add(accessToData.GetTeamName(team2IdTemp[i]));
             }
             
         }

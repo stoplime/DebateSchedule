@@ -74,24 +74,26 @@ namespace DataAccess
             return matchIDs.Count;
         }
 
-        public void GetScheduleData(int matchID, out DateTime matchTime, out int team1ID, out int team2ID)
+        public void GetScheduleData(out List<int> matchID, out List<DateTime> matchTime, out List<int> team1ID, out List<int> team2ID)
         {
             dl.SqlConnection.Open();
-            string getMatchTimeString = "SELECT sche_datetime, sche_team1, sche_team2 FROM Schedule WHERE sche_id='" + matchID + "'";
+            string getMatchTimeString = "SELECT sche_id, sche_datetime, sche_team1, sche_team2 FROM Schedule WHERE sche_deleted IS NULL ORDER BY sche_datetime";
             SqlCommand sqlc = new SqlCommand(getMatchTimeString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             SqlDateTime time = SqlDateTime.MinValue;
-            matchTime = DateTime.MinValue;
-            team1ID = 0;
-            team2ID = 0;
+            matchID = new List<int>();
+            matchTime = new List<DateTime>();
+            team1ID = new List<int>();
+            team2ID = new List<int>();
             if (reader.HasRows)
             {
-                if (reader.Read())
+                while (reader.Read())
                 {
-                    time = reader.GetDateTime(0);
-                    matchTime = (DateTime)time;
-                    team1ID = reader.GetInt32(1);
-                    team2ID = reader.GetInt32(2);
+                    matchID.Add(reader.GetInt32(0));
+                    time = reader.GetDateTime(1);
+                    matchTime.Add((DateTime)time);
+                    team1ID.Add(reader.GetInt32(2));
+                    team2ID.Add(reader.GetInt32(3));
                 }
             }
             dl.SqlConnection.Close();
@@ -265,10 +267,10 @@ namespace DataAccess
             return true;
         }
 
-        public bool getTeamsFromDate(DateTime date, out List<int> participatingTeams)
+        public bool getTeamsFromDate(DateTime date, out List<int> participatingTeams, int ignoreID)
         {
             dl.SqlConnection.Open();
-            string getTeamsString = "SELECT sche_team1, sche_team2 FROM Schedule WHERE sche_datetime='" + date+"'";
+            string getTeamsString = "SELECT sche_team1, sche_team2 FROM Schedule WHERE sche_deleted IS NULL AND NOT sche_id='" + ignoreID + "' AND sche_datetime='" + date + "'";
             SqlCommand sqlc = new SqlCommand(getTeamsString, dl.SqlConnection);
             SqlDataReader reader = sqlc.ExecuteReader();
             participatingTeams = new List<int>();

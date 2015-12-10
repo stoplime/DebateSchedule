@@ -175,27 +175,54 @@
 
             <tbody>
                 @{
-                    //int count = 0;
+                    int countDates = 0;
+                    DateTime preTime = DateTime.MinValue;
                     for (int i = 0; i < scheduler.MatchIDs.Count; i++)
                     {
-                        //count++;
-                        //int roundNum = i + 1;
-                        <tr>
-                            @{
-                                if (Session["EditSchedule"] != null)
-                                {
-                                    if ((bool)Session["EditSchedule"])
+                        if (scheduler.MatchTimes[i] != preTime)
+                        {
+                            //new date
+                            countDates++;
+                            preTime = scheduler.MatchTimes[i];
+                        }
+                        if (countDates % 2 == 0)
+                        {
+                            <tr class="cyan lighten-4">
+                                @{
+                                    if (Session["EditSchedule"] != null)
                                     {
-                                        <td><a href="@Href("~/UpdateSchedule", scheduler.MatchIDs[i])" class="btn waves-effect waves-light">Edit</a></td>
+                                        if ((bool)Session["EditSchedule"])
+                                        {
+                                            <td><a href="@Href("~/UpdateSchedule", scheduler.MatchIDs[i])" class="btn waves-effect waves-light">Edit</a></td>
+                                        }
                                     }
                                 }
-                            }
-                            <td>@scheduler.MatchIDs[i]</td>
-                            <td>@scheduler.MatchTimes[i].ToString()</td>
-                            <td>@scheduler.MatchTeam1Names[i]</td>
-                            <td>@scheduler.MatchTeam2Names[i]</td>
-                        </tr>
+                                <td>@scheduler.MatchIDs[i]</td>
+                                <td>@scheduler.MatchTimes[i].ToString()</td>
+                                <td>@scheduler.MatchTeam1Names[i]</td>
+                                <td>@scheduler.MatchTeam2Names[i]</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="cyan lighten-5">
+                                @{
+                                    if (Session["EditSchedule"] != null)
+                                    {
+                                        if ((bool)Session["EditSchedule"])
+                                        {
+                                            <td><a href="@Href("~/UpdateSchedule", scheduler.MatchIDs[i])" class="btn waves-effect waves-light">Edit</a></td>
+                                        }
+                                    }
                                 }
+                                <td>@scheduler.MatchIDs[i]</td>
+                                <td>@scheduler.MatchTimes[i].ToString()</td>
+                                <td>@scheduler.MatchTeam1Names[i]</td>
+                                <td>@scheduler.MatchTeam2Names[i]</td>
+                            </tr>
+                        }
+                        
+                    }
                 }
 
             </tbody>
